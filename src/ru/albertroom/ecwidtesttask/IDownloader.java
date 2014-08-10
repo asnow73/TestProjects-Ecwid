@@ -7,5 +7,5 @@ package ru.albertroom.ecwidtesttask;
 
 public interface IDownloader
 {
-	void download(String url);
+	void download();
 }

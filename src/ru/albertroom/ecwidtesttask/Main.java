@@ -13,15 +13,16 @@ import java.util.*;*/
 public class Main
 {
 	public static void main(String[] args)
-	{		
-		//downloader.download("http://htmlbook.ru/files/images/blog/triangle-2.png");	
-		Downloader downloader1 = new Downloader("data.png");
-		ThreadDownload thread1 = new ThreadDownload(downloader1, "http://htmlbook.ru/files/images/blog/triangle-2.png", "thread #1");
+	{
+		//Downloader downloader1 = new Downloader("http://htmlbook.ru/files/images/blog/triangle-2.png", "data.png");
+		//downloader1.download();
 		
-		Downloader downloader2 = new Downloader("kran.jpg");
-		ThreadDownload thread2 = new ThreadDownload(downloader2, "http://aquasantop.ru/img/catphotos/68/2(218).jpg", "thread #2");
+		//разобрать аргументы
 		
-		Downloader downloader3 = new Downloader("kran.jpg");
-		ThreadDownload thread3 = new ThreadDownload(downloader3, "http://images.kika.com/db/1/a/8/17471898_2_z.jpg", "thread #3");
+		//обработать на предмет повтор€ющихс€ ссылок
+		
+		ManagerDownloading manager = new ManagerDownloading();
+		manager.startDownloading(/*countThreads, downloadingSpeed, listOfDataSource*/);
+		
 	}
 }
