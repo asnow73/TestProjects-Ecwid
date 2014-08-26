@@ -1,77 +1,129 @@
 package ru.albertroom.ecwidtesttask;
 
-import java.util.HashMap;
-import java.util.ArrayList;
+import org.apache.commons.cli.*;
 
 public class ArgsAnalyzer
-{
-	private HashMap<String, ArrayList<String>> argumentsValues;
-	private ArrayList<CommandArgumentDescription> argumentsDescription;
+{	
+	private Options options = new Options();	
+	private CommandLine cmd;
+	private String[] arguments;
 	
-	public ArgsAnalyzer()
+	public ArgsAnalyzer(String[] args)
 	{
-		argumentsValues = new HashMap<String, ArrayList<String>>();
-		argumentsDescription = new ArrayList<CommandArgumentDescription>();
+		arguments = args;
+		cmd = null;
+		
+		Option oThreadsNumber = new Option("n", true, "number of threads");
+		oThreadsNumber.setArgs(1);
+		oThreadsNumber.setRequired(true);
+		oThreadsNumber.setArgName("threadsNumber");
+		options.addOption(oThreadsNumber);
+		
+		Option oSpeedLimit = new Option("l", true, "speed limit of downloading. Byte per second (suffix k=1024, m=1024*1024)");
+		oSpeedLimit.setArgs(1);
+		oSpeedLimit.setRequired(true);
+		oSpeedLimit.setArgName("speedLimit");
+		options.addOption(oSpeedLimit);
+		
+		Option oSaveFolder = new Option("o", true, "folder for save information");
+		oSaveFolder.setArgs(1);
+		oSaveFolder.setRequired(true);
+		oSaveFolder.setArgName("saveFolder");
+		options.addOption(oSaveFolder);
+		
+		Option oLinksList = new Option("f", true, "path to the file wich contains list of links");
+		oLinksList.setArgs(1);
+		oLinksList.setRequired(true);
+		oLinksList.setArgName("linksList");
+		options.addOption(oLinksList);
 	}
 	
-	public void addArgument(CommandArgumentDescription argDescription)
+	private void parse()
 	{
-		argumentsValues.put(argDescription.getArgumentName(), new ArrayList<String>());
-		argumentsDescription.add(argDescription);
-	}
-	
-	private boolean isOption(String str)
-	{
-		boolean result = false;
-		if (str.charAt(0) == '-')
+		CommandLineParser parser = new PosixParser();
+		HelpFormatter formatter = new HelpFormatter();
+		try
 		{
-			result = true;
-		}
-		return result;
-	}
-	
-	private void readParams(String[] args)
-	{
-		ArrayList<String> values = null;
-		for (String arg: args)
+			cmd = parser.parse( options, arguments);
+		}		
+		catch (ParseException e) 
 		{
-			if (isOption(arg))
-			{
-				if (argumentsValues.keySet().contains(arg))
-				{
-					values = argumentsValues.get(arg);
-				}
-				else
-				{
-					//throw UnknownOptionException(); //проверка на неопознаные ключи
-				}
-			}
-			else if (values != null)
-			{
-				values.add(arg);
-			}
-			else
-			{
-				//первый параметр не является ключом
-			}
+			System.err.println( "Parsing failed. Reason: " + e.getMessage() );
+			formatter.printHelp( "utility", options );
 		}
 	}
 	
-	private void checkArguments()
+	public int getNumberOfThreads()
 	{
-		//проверка все ли требуемые опции указаны
-		for (CommandArgumentDescription argumentDesc : argumentsDescription)
+		int threadsNumber = 0;
+		
+		if (cmd == null)
 		{
-			if ( (argumentDesc.isRequired()) && (argumentsValues.keySet().contains(argumentDesc.getArgumentName()) == false) )
-			{
-				//throw ArgumentMissedException
-			}
+			parse();
 		}
+		
+		try
+		{
+			threadsNumber = Integer.parseInt(cmd.getOptionValue("n"));
+		}
+		catch (NumberFormatException e)
+		{
+			System.out.println("Error. Incorrect value for number of threads");
+			throw e;
+        }
+		return threadsNumber;
 	}
 	
-	public void parse(String[] args)
+	public int getDownloadingSpeedLimit()
 	{
-		readParams(args);
-		checkArguments();		
+		final int KBYTES = 1024;
+		final int MBYTES = 1024*1024;
+		int speedLimit = 0;
+		
+		if (cmd == null)
+		{
+			parse();
+		}
+		
+		try
+		{
+			String slimit = cmd.getOptionValue("l");			
+			StringBuilder sb = new StringBuilder(slimit);
+			char suffix = sb.charAt(slimit.length() - 1);
+			slimit = sb.deleteCharAt(slimit.length() - 1).toString();
+			switch (suffix)
+			{
+				case 'k':
+					speedLimit = Integer.parseInt(slimit) * KBYTES;
+					break;
+				case 'm':
+					speedLimit = Integer.parseInt(slimit) * MBYTES;
+					break;
+			}
+		}
+		catch (NumberFormatException e)
+		{
+			System.out.println("Error. Incorrect value for speed limit of downloading");
+			throw e;
+        }
+		return speedLimit;
+	}
+	
+	public String getSvaeFolder()
+	{
+		if (cmd == null)
+		{
+			parse();
+		}
+		return cmd.getOptionValue("o");
+	}
+	
+	public String getPathToLinksList()
+	{
+		if (cmd == null)
+		{
+			parse();
+		}
+		return cmd.getOptionValue("f");
 	}
 }
