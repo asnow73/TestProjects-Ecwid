@@ -90,14 +90,19 @@ public class ArgsAnalyzer
 			String slimit = cmd.getOptionValue("l");			
 			StringBuilder sb = new StringBuilder(slimit);
 			char suffix = sb.charAt(slimit.length() - 1);
-			slimit = sb.deleteCharAt(slimit.length() - 1).toString();
+			
 			switch (suffix)
 			{
 				case 'k':
+					slimit = sb.deleteCharAt(slimit.length() - 1).toString();
 					speedLimit = Integer.parseInt(slimit) * KBYTES;
 					break;
 				case 'm':
+					slimit = sb.deleteCharAt(slimit.length() - 1).toString();
 					speedLimit = Integer.parseInt(slimit) * MBYTES;
+					break;
+				default:
+					speedLimit = Integer.parseInt(slimit);
 					break;
 			}
 		}
