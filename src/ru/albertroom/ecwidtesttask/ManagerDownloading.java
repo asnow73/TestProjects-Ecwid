@@ -72,6 +72,7 @@ public class ManagerDownloading
 
 			int numberOfFinishedThreads = removeFinishedThreads();
 			numberFilesForDownloading -= numberOfFinishedThreads;
+			Thread.yield();
 		}
 		timer.finish();
 		System.out.println("Working time is " + String.valueOf(timer.getTotalTime()) + " ms" );
