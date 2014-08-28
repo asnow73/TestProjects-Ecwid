@@ -1,4 +1,4 @@
-package ru.albertroom.ecwidtesttask;
+package ru.albertroom.ecwidtesttask.downloader;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+
+import ru.albertroom.ecwidtesttask.downloader.services.IDownloadingHandler;
+import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
 public class HttpDownloader implements IDownloader
 {

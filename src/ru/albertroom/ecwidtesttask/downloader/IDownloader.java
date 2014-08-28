@@ -3,7 +3,7 @@
  * Author: Galiullov Albert
 */
 
-package ru.albertroom.ecwidtesttask;
+package ru.albertroom.ecwidtesttask.downloader;
 
 public interface IDownloader
 {

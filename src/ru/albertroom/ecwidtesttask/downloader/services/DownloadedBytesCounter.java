@@ -1,4 +1,5 @@
-package ru.albertroom.ecwidtesttask;
+package ru.albertroom.ecwidtesttask.downloader.services;
+
 
 public class DownloadedBytesCounter implements IDownloadingHandler
 {

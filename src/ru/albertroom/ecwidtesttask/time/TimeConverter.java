@@ -1,4 +1,4 @@
-package ru.albertroom.ecwidtesttask;
+package ru.albertroom.ecwidtesttask.time;
 
 public class TimeConverter
 {

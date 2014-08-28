@@ -3,7 +3,10 @@
  * Author: Galiullov Albert
 */
 
-package ru.albertroom.ecwidtesttask;
+package ru.albertroom.ecwidtesttask.downloader;
+
+import ru.albertroom.ecwidtesttask.ManagerDownloading;
+
 
 public class ThreadDownload extends Thread
 {

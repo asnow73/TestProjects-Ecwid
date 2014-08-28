@@ -2,6 +2,13 @@ package ru.albertroom.ecwidtesttask;
 
 import java.util.*; 
 
+import ru.albertroom.ecwidtesttask.downloader.HttpDownloader;
+import ru.albertroom.ecwidtesttask.downloader.ThreadDownload;
+import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
+import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
+import ru.albertroom.ecwidtesttask.time.Timer;
+
+
 public class ManagerDownloading
 {
 	private int numberFilesForDownloading;	
@@ -43,6 +50,19 @@ public class ManagerDownloading
 		return result;
 	}
 	
+	private String getFileName(String link)
+	{
+		String result = "";
+		int startIndexOfFileNmae = link.lastIndexOf('/')+1;
+		
+		if (startIndexOfFileNmae < link.length())
+		{
+			result = link.substring(link.lastIndexOf('/')+1);
+		}
+		
+		return result;
+	}
+	
 	public void startDownloading()
 	{
 		Timer timer = new Timer();
@@ -60,7 +80,7 @@ public class ManagerDownloading
 			if (canCreateNewThread())
 			{
 				String linkForDownload = stackOfDataSource.pop();
-				HttpDownloader downloader = new HttpDownloader(linkForDownload, String.valueOf(num));
+				HttpDownloader downloader = new HttpDownloader(linkForDownload, getFileName(linkForDownload));
 				ThreadDownload thread = new ThreadDownload(downloader, "thread #" + String.valueOf(num));				
 				downloader.setDownloadedBytesCounter(bytesCounter);
 				downloader.setSpeedController(speedControll);
@@ -69,10 +89,46 @@ public class ManagerDownloading
 				threads.add(thread);
 				thread.start();
 			}
-
+			
 			int numberOfFinishedThreads = removeFinishedThreads();
 			numberFilesForDownloading -= numberOfFinishedThreads;
-			Thread.yield();
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			/*for (int i = 0; i < numberOfThreads; ++i)
+			{
+				if (canCreateNewThread())
+				{
+					String linkForDownload = stackOfDataSource.pop();
+					HttpDownloader downloader = new HttpDownloader(linkForDownload, getFileName(linkForDownload));
+					ThreadDownload thread = new ThreadDownload(downloader, "thread #" + String.valueOf(num));				
+					downloader.setDownloadedBytesCounter(bytesCounter);
+					downloader.setSpeedController(speedControll);
+					
+					num++;
+					threads.add(thread);
+					thread.start();
+				}
+			}
+			
+			for (ThreadDownload thread : threads)
+			{
+				try {
+					thread.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			int numberOfFinishedThreads = removeFinishedThreads();
+			numberFilesForDownloading -= numberOfFinishedThreads;
+			Thread.yield();*/
+			
 		}
 		timer.finish();
 		System.out.println("Working time is " + String.valueOf(timer.getTotalTime()) + " ms" );
