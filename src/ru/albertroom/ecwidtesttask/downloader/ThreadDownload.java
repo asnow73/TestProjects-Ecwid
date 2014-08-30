@@ -5,9 +5,6 @@
 
 package ru.albertroom.ecwidtesttask.downloader;
 
-import ru.albertroom.ecwidtesttask.ManagerDownloading;
-
-
 public class ThreadDownload extends Thread
 {
 	private IDownloader downloader;
