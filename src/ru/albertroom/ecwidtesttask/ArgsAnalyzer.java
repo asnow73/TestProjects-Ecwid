@@ -38,7 +38,7 @@ public class ArgsAnalyzer
 		options.addOption(oLinksList);
 	}
 	
-	private void parse()
+	private void parse() throws ParseException
 	{
 		CommandLineParser parser = new PosixParser();
 		HelpFormatter formatter = new HelpFormatter();
@@ -48,15 +48,16 @@ public class ArgsAnalyzer
 		}		
 		catch (ParseException e) 
 		{
-			System.err.println( "Parsing failed. Reason: " + e.getMessage() );
+			System.out.println( "Parsing failed. Reason: " + e.getMessage() );
 			formatter.printHelp( "utility", options );
+			throw e;
 		}
 	}
 	
-	public int getNumberOfThreads()
+	public int getNumberOfThreads() throws ParseException
 	{
 		int threadsNumber = 0;
-		
+
 		if (cmd == null)
 		{
 			parse();
@@ -74,7 +75,7 @@ public class ArgsAnalyzer
 		return threadsNumber;
 	}
 	
-	public int getDownloadingSpeedLimit()
+	public int getDownloadingSpeedLimit() throws ParseException
 	{
 		final int KBYTES = 1024;
 		final int MBYTES = 1024*1024;
@@ -114,7 +115,7 @@ public class ArgsAnalyzer
 		return speedLimit;
 	}
 	
-	public String getSvaeFolder()
+	public String getSvaeFolder() throws ParseException
 	{
 		if (cmd == null)
 		{
@@ -123,7 +124,7 @@ public class ArgsAnalyzer
 		return cmd.getOptionValue("o");
 	}
 	
-	public String getPathToLinksList()
+	public String getPathToLinksList() throws ParseException
 	{
 		if (cmd == null)
 		{

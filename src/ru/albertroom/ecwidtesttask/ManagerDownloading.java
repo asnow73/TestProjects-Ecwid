@@ -6,7 +6,9 @@ import ru.albertroom.ecwidtesttask.downloader.HttpDownloader;
 import ru.albertroom.ecwidtesttask.downloader.ThreadDownload;
 import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
 import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
+import ru.albertroom.ecwidtesttask.readlinkslist.ILinkDataSource;
 import ru.albertroom.ecwidtesttask.time.Timer;
+import ru.albertroom.ecwidtesttask.downloader.LinkData;
 
 
 public class ManagerDownloading
@@ -15,15 +17,15 @@ public class ManagerDownloading
 	private ArrayList<ThreadDownload> threads;
 	private int numberOfThreads;
 	private int downloadingSpeed;
-	private Stack<String> stackOfDataSource;
+	ILinkDataSource linksData;
 	
-	public ManagerDownloading(int numberOfThreads, int downloadingSpeed, Stack<String> stackOfDataSource)
+	public ManagerDownloading(int numberOfThreads, int downloadingSpeed, ILinkDataSource linksData)
 	{
 		this.numberFilesForDownloading = 0;
 		this.threads = new ArrayList<ThreadDownload>(numberOfThreads);
 		this.numberOfThreads = numberOfThreads;
 		this.downloadingSpeed = downloadingSpeed;
-		this.stackOfDataSource = stackOfDataSource;
+		this.linksData = linksData;
 	}
 	
 	private boolean isDownloadFinished() 
@@ -33,7 +35,7 @@ public class ManagerDownloading
 	
 	private boolean canCreateNewThread()
 	{
-		return ((threads.size() < numberOfThreads) && (!stackOfDataSource.empty()));
+		return ((threads.size() < numberOfThreads) && (!linksData.empty()));
 	}
 	
 	private int removeFinishedThreads()
@@ -50,19 +52,6 @@ public class ManagerDownloading
 		return result;
 	}
 	
-	private String getFileName(String link)
-	{
-		String result = "";
-		int startIndexOfFileNmae = link.lastIndexOf('/')+1;
-		
-		if (startIndexOfFileNmae < link.length())
-		{
-			result = link.substring(link.lastIndexOf('/')+1);
-		}
-		
-		return result;
-	}
-	
 	public void startDownloading()
 	{
 		Timer timer = new Timer();
@@ -70,7 +59,7 @@ public class ManagerDownloading
 		SpeedController speedControll = new SpeedController(downloadingSpeed);
 		
 		int num = 0;
-		numberFilesForDownloading = stackOfDataSource.size();
+		numberFilesForDownloading = linksData.size();
 		
 		timer.start();
 		speedControll.start();
@@ -79,8 +68,9 @@ public class ManagerDownloading
 		{
 			if (canCreateNewThread())
 			{
-				String linkForDownload = stackOfDataSource.pop();
-				HttpDownloader downloader = new HttpDownloader(linkForDownload, getFileName(linkForDownload));
+				LinkData linkForDownload = linksData.pop();
+				//TODO linkForDownload.getSavingNames()[0]
+				HttpDownloader downloader = new HttpDownloader(linkForDownload.getLink(), linkForDownload.getSaveAsNames()[0]);
 				ThreadDownload thread = new ThreadDownload(downloader, "thread #" + String.valueOf(num));				
 				downloader.setDownloadedBytesCounter(bytesCounter);
 				downloader.setSpeedController(speedControll);
