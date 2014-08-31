@@ -2,6 +2,7 @@ package ru.albertroom.ecwidtesttask;
 
 import java.util.*; 
 
+import ru.albertroom.ecwidtesttask.downloader.FileSaver;
 import ru.albertroom.ecwidtesttask.downloader.HttpDownloader;
 import ru.albertroom.ecwidtesttask.downloader.ThreadDownload;
 import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
@@ -69,9 +70,11 @@ public class ManagerDownloading
 			if (canCreateNewThread())
 			{
 				LinkData linkForDownload = linksData.pop();
-				//TODO linkForDownload.getSavingNames()[0]
-				HttpDownloader downloader = new HttpDownloader(linkForDownload.getLink(), linkForDownload.getSaveAsNames()[0]);
-				ThreadDownload thread = new ThreadDownload(downloader, "thread #" + String.valueOf(num));				
+				HttpDownloader downloader = new HttpDownloader(linkForDownload.getLink());
+				
+				FileSaver saver = new FileSaver(linkForDownload.getSaveAsNames());
+				
+				ThreadDownload thread = new ThreadDownload(downloader, "thread #" + String.valueOf(num), saver);				
 				downloader.setDownloadedBytesCounter(bytesCounter);
 				downloader.setSpeedController(speedControll);
 				

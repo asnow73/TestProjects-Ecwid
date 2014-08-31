@@ -1,9 +1,7 @@
 package ru.albertroom.ecwidtesttask.downloader;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
@@ -12,18 +10,16 @@ import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
 public class HttpDownloader implements IDownloader
 {
-	private File fileForSave;
 	private String urlForDownload;
 	private IDownloadingHandler downloadedBytesCounter;
 	private ISpeedController speedController;
 	
 	private URL source;
 	private BufferedInputStream inStream;
-	private BufferedOutputStream outStream;
+	private ByteArrayOutputStream outStream;
 	
-	public HttpDownloader(String url, String pathToSave)
+	public HttpDownloader(String url)
 	{
-		this.fileForSave = new File(pathToSave);
 		this.urlForDownload = url;
 		this.downloadedBytesCounter = null;
 		this.speedController = null;
@@ -43,7 +39,7 @@ public class HttpDownloader implements IDownloader
 	{
 		source = new URL(urlForDownload);
 		inStream = new BufferedInputStream(source.openStream());
-		outStream = new BufferedOutputStream(new FileOutputStream(fileForSave));
+		outStream = new ByteArrayOutputStream();
 	}
 	
 	private int getBytes(int size) throws IOException
@@ -88,7 +84,7 @@ public class HttpDownloader implements IDownloader
 	}
 
 	@Override
-	public void download()
+	public byte[] download()
 	{
 		int result = 0;
 		try
@@ -104,8 +100,9 @@ public class HttpDownloader implements IDownloader
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			System.out.println("Error downloading ");
 		}
+		return outStream.toByteArray();
 	}
 
 }

@@ -7,5 +7,5 @@ package ru.albertroom.ecwidtesttask.downloader;
 
 public interface IDownloader
 {
-	void download();
+	byte[] download();
 }

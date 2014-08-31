@@ -5,14 +5,18 @@
 
 package ru.albertroom.ecwidtesttask.downloader;
 
+//import java.io.FileOutputStream;
+
 public class ThreadDownload extends Thread
 {
 	private IDownloader downloader;
+	private IDownloadSave saver;
 	
-	public ThreadDownload(IDownloader downloader, String threadName)
+	public ThreadDownload(IDownloader downloader, String threadName, IDownloadSave saver)
 	{
 		setName(threadName);
 		this.downloader = downloader;
+		this.saver = saver;
 	}
 	
 	@Override
@@ -27,7 +31,8 @@ public class ThreadDownload extends Thread
 	{
 		try
 		{
-			downloader.download();
+			byte[] bytes = downloader.download();
+			saver.save(bytes);
 		}
 		catch (Exception e)
 		{

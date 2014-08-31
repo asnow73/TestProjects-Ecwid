@@ -6,14 +6,12 @@ import java.io.*;
 
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
 
-public class ReaderLinks implements ILinkDataSource
+public class DownloadInfo implements ILinkDataSource
 {
 	private Hashtable<String, HashSet<String>> links;
-	private String pathToLinksFile;
 	
-	public ReaderLinks(String pathToLinksFile)
+	public DownloadInfo()
 	{
-		this.pathToLinksFile = pathToLinksFile;
 		this.links = new Hashtable<String, HashSet<String>>();
 	}
 	
@@ -65,7 +63,7 @@ public class ReaderLinks implements ILinkDataSource
 		}
 	}
 	
-	public void read() throws UncorrectLinkException, FileNotFoundException, IOException
+	public void read(String pathToLinksFile) throws UncorrectLinkException, FileNotFoundException, IOException
 	{
 		try
 		{

@@ -5,7 +5,7 @@
 
 package ru.albertroom.ecwidtesttask;
 
-import ru.albertroom.ecwidtesttask.readlinkslist.ReaderLinks;
+import ru.albertroom.ecwidtesttask.readlinkslist.DownloadInfo;
 
 //TODO нарисовать схему связей пакетов, кто кого включает
 public class Main
@@ -26,10 +26,10 @@ public class Main
 			System.out.println(pathToLinks);
 			System.out.println(saveFolder);
 			
-			ReaderLinks readerLinks = new ReaderLinks(pathToLinks);
-			readerLinks.read();
+			DownloadInfo downloadInfo = new DownloadInfo();
+			downloadInfo.read(pathToLinks);
 			
-			ManagerDownloading manager = new ManagerDownloading(countThreads, downloadingSpeed, readerLinks);			
+			ManagerDownloading manager = new ManagerDownloading(countThreads, downloadingSpeed, downloadInfo);			
 			manager.startDownloading();
 		}
 		catch (Exception e)
