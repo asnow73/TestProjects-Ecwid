@@ -15,12 +15,13 @@ public class Main
 	{
 		try
 		{
-			ArgsAnalyzer argsParser = new ArgsAnalyzer(args);
+			ArgsAnalyzer argsParser = new ArgsAnalyzer();
+			argsParser.parse(args);
 			
 			int countThreads = argsParser.getNumberOfThreads();
 			int downloadingSpeed = argsParser.getDownloadingSpeedLimit();
 			String pathToLinks = argsParser.getPathToLinksList();
-			String saveFolder = argsParser.getSvaeFolder();
+			String saveFolder = argsParser.getSaveFolder();
 			
 			System.out.println(countThreads);
 			System.out.println(downloadingSpeed);

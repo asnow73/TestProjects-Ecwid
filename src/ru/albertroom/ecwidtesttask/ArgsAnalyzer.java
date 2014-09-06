@@ -7,16 +7,14 @@ public class ArgsAnalyzer
 {	
 	private Options options = new Options();	
 	private CommandLine cmd;
-	private String[] arguments;
 	
 	private final String THREADS_PARAM = "n";
 	private final String SPEED_PARAM = "l"; 
 	private final String FOLDER_SAVE_PARAM = "o";
 	private final String FILE_LINKS_PARAM = "f";
 	
-	public ArgsAnalyzer(String[] args)
+	public ArgsAnalyzer()
 	{
-		arguments = args;
 		cmd = null;
 		
 		Option oThreadsNumber = new Option(THREADS_PARAM, true, "number of threads");
@@ -44,13 +42,13 @@ public class ArgsAnalyzer
 		options.addOption(oLinksList);
 	}
 	
-	private void parse() throws ParseException
+	public void parse(String[] args) throws ParseException
 	{
 		CommandLineParser parser = new PosixParser();
 		HelpFormatter formatter = new HelpFormatter();
 		try
 		{
-			cmd = parser.parse( options, arguments);
+			cmd = parser.parse( options, args);
 		}		
 		catch (ParseException e) 
 		{
@@ -63,13 +61,7 @@ public class ArgsAnalyzer
 	//Method to get the number of threads
 	public int getNumberOfThreads() throws ParseException
 	{
-		int threadsNumber = 0;
-
-		if (cmd == null)
-		{
-			parse();
-		}
-		
+		int threadsNumber = 0;	
 		try
 		{
 			threadsNumber = Integer.parseInt(cmd.getOptionValue(THREADS_PARAM));
@@ -88,11 +80,6 @@ public class ArgsAnalyzer
 		final int KBYTES = 1024;
 		final int MBYTES = 1024*1024;
 		int speedLimit = 0;
-		
-		if (cmd == null)
-		{
-			parse();
-		}
 		
 		try
 		{
@@ -124,22 +111,14 @@ public class ArgsAnalyzer
 	}
 	
 	//Method to get the folder for saving downloaded files
-	public String getSvaeFolder() throws ParseException
+	public String getSaveFolder() throws ParseException
 	{
-		if (cmd == null)
-		{
-			parse();
-		}
 		return cmd.getOptionValue(FOLDER_SAVE_PARAM);
 	}
 	
 	//Method to get the path to file with links for download
 	public String getPathToLinksList() throws ParseException
 	{
-		if (cmd == null)
-		{
-			parse();
-		}
 		return cmd.getOptionValue(FILE_LINKS_PARAM);
 	}
 }
