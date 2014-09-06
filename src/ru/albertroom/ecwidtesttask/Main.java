@@ -5,9 +5,10 @@
 
 package ru.albertroom.ecwidtesttask;
 
-import ru.albertroom.ecwidtesttask.readlinkslist.DownloadInfo;
+import java.util.Stack;
+import ru.albertroom.ecwidtesttask.downloader.LinkData;
+import ru.albertroom.ecwidtesttask.readlinkslist.FileReaderLinksInfo;
 
-//TODO нарисовать схему связей пакетов, кто кого включает
 public class Main
 {
 	public static void main(String[] args)
@@ -26,10 +27,10 @@ public class Main
 			System.out.println(pathToLinks);
 			System.out.println(saveFolder);
 			
-			DownloadInfo downloadInfo = new DownloadInfo();
-			downloadInfo.read(pathToLinks);
+			FileReaderLinksInfo downloadInfo = new FileReaderLinksInfo();
+			Stack<LinkData> linksData = downloadInfo.read(pathToLinks);
 			
-			ManagerDownloading manager = new ManagerDownloading(countThreads, downloadingSpeed, downloadInfo);			
+			ManagerDownloading manager = new ManagerDownloading(countThreads, downloadingSpeed, linksData);			
 			manager.startDownloading();
 		}
 		catch (Exception e)

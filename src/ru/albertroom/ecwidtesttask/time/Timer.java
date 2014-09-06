@@ -1,6 +1,6 @@
 package ru.albertroom.ecwidtesttask.time;
 
-
+//Class to measure the time
 public class Timer
 {
 	private long startTime;

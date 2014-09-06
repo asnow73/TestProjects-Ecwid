@@ -5,8 +5,7 @@
 
 package ru.albertroom.ecwidtesttask.downloader;
 
-//import java.io.FileOutputStream;
-
+//Class for downloading in the individual thread
 public class ThreadDownload extends Thread
 {
 	private IDownloader downloader;
@@ -32,7 +31,7 @@ public class ThreadDownload extends Thread
 		try
 		{
 			byte[] bytes = downloader.download();
-			saver.save(bytes);
+			saver.save(bytes); //saving downloaded bytes
 		}
 		catch (Exception e)
 		{

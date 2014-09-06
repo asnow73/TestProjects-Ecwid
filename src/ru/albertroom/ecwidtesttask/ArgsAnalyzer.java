@@ -2,36 +2,42 @@ package ru.albertroom.ecwidtesttask;
 
 import org.apache.commons.cli.*;
 
+//Class for parsing command line parameters
 public class ArgsAnalyzer
 {	
 	private Options options = new Options();	
 	private CommandLine cmd;
 	private String[] arguments;
 	
+	private final String THREADS_PARAM = "n";
+	private final String SPEED_PARAM = "l"; 
+	private final String FOLDER_SAVE_PARAM = "o";
+	private final String FILE_LINKS_PARAM = "f";
+	
 	public ArgsAnalyzer(String[] args)
 	{
 		arguments = args;
 		cmd = null;
 		
-		Option oThreadsNumber = new Option("n", true, "number of threads");
+		Option oThreadsNumber = new Option(THREADS_PARAM, true, "number of threads");
 		oThreadsNumber.setArgs(1);
 		oThreadsNumber.setRequired(true);
 		oThreadsNumber.setArgName("threadsNumber");
 		options.addOption(oThreadsNumber);
 		
-		Option oSpeedLimit = new Option("l", true, "speed limit of downloading. Byte per second (suffix k=1024, m=1024*1024)");
+		Option oSpeedLimit = new Option(SPEED_PARAM, true, "speed limit of downloading. Byte per second (suffix k=1024, m=1024*1024)");
 		oSpeedLimit.setArgs(1);
 		oSpeedLimit.setRequired(true);
 		oSpeedLimit.setArgName("speedLimit");
 		options.addOption(oSpeedLimit);
 		
-		Option oSaveFolder = new Option("o", true, "folder for save information");
+		Option oSaveFolder = new Option(FOLDER_SAVE_PARAM, true, "folder for save information");
 		oSaveFolder.setArgs(1);
 		oSaveFolder.setRequired(true);
 		oSaveFolder.setArgName("saveFolder");
 		options.addOption(oSaveFolder);
 		
-		Option oLinksList = new Option("f", true, "path to the file wich contains list of links");
+		Option oLinksList = new Option(FILE_LINKS_PARAM, true, "path to the file wich contains list of links");
 		oLinksList.setArgs(1);
 		oLinksList.setRequired(true);
 		oLinksList.setArgName("linksList");
@@ -54,6 +60,7 @@ public class ArgsAnalyzer
 		}
 	}
 	
+	//Method to get the number of threads
 	public int getNumberOfThreads() throws ParseException
 	{
 		int threadsNumber = 0;
@@ -65,7 +72,7 @@ public class ArgsAnalyzer
 		
 		try
 		{
-			threadsNumber = Integer.parseInt(cmd.getOptionValue("n"));
+			threadsNumber = Integer.parseInt(cmd.getOptionValue(THREADS_PARAM));
 		}
 		catch (NumberFormatException e)
 		{
@@ -75,6 +82,7 @@ public class ArgsAnalyzer
 		return threadsNumber;
 	}
 	
+	//Method to get the speed of downloading
 	public int getDownloadingSpeedLimit() throws ParseException
 	{
 		final int KBYTES = 1024;
@@ -88,7 +96,7 @@ public class ArgsAnalyzer
 		
 		try
 		{
-			String slimit = cmd.getOptionValue("l");			
+			String slimit = cmd.getOptionValue(SPEED_PARAM);			
 			StringBuilder sb = new StringBuilder(slimit);
 			char suffix = sb.charAt(slimit.length() - 1);
 			
@@ -115,21 +123,23 @@ public class ArgsAnalyzer
 		return speedLimit;
 	}
 	
+	//Method to get the folder for saving downloaded files
 	public String getSvaeFolder() throws ParseException
 	{
 		if (cmd == null)
 		{
 			parse();
 		}
-		return cmd.getOptionValue("o");
+		return cmd.getOptionValue(FOLDER_SAVE_PARAM);
 	}
 	
+	//Method to get the path to file with links for download
 	public String getPathToLinksList() throws ParseException
 	{
 		if (cmd == null)
 		{
 			parse();
 		}
-		return cmd.getOptionValue("f");
+		return cmd.getOptionValue(FILE_LINKS_PARAM);
 	}
 }

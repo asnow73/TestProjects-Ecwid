@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+//Class to save array of bytes to file(s)
 public class FileSaver implements IDownloadSave
 {
 	private String[] fileNames;

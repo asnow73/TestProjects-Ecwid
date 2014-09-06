@@ -2,41 +2,32 @@ package ru.albertroom.ecwidtesttask.readlinkslist;
 
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Stack;
 import java.io.*;
 
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
 
-public class DownloadInfo implements ILinkDataSource
+//Class to read links data from file 
+public class FileReaderLinksInfo
 {
 	private Hashtable<String, HashSet<String>> links;
 	
-	public DownloadInfo()
+	public FileReaderLinksInfo()
 	{
 		this.links = new Hashtable<String, HashSet<String>>();
 	}
 	
-	@Override
-	public LinkData pop()
-	{	
-		String key = links.keys().nextElement();	
-		HashSet<String> names = links.get(key);
-		String[] saveAsNames = names.toArray(new String[names.size()]);
-		links.remove(key);
-		
-		LinkData linkd = new LinkData(key, saveAsNames);
-		return linkd;
-	}
-	
-	@Override
-	public int size()
+	private Stack<LinkData> getLinkDataStack()
 	{
-		return links.size();
-	}
-	
-	@Override
-	public boolean empty()
-	{
-		return links.isEmpty();
+		Stack<LinkData> stack = new Stack<LinkData>();
+		while (links.keys().hasMoreElements())
+		{
+			String key = links.keys().nextElement();
+			HashSet<String> names = links.get(key);
+			String[] saveAsNames = names.toArray(new String[names.size()]);
+			stack.add(new LinkData(key, saveAsNames));
+		}
+		return stack;
 	}
 	
 	private boolean isLinkCorrect(String[] strs) throws UncorrectLinkException
@@ -63,7 +54,7 @@ public class DownloadInfo implements ILinkDataSource
 		}
 	}
 	
-	public void read(String pathToLinksFile) throws UncorrectLinkException, FileNotFoundException, IOException
+	public Stack<LinkData> read(String pathToLinksFile) throws UncorrectLinkException, FileNotFoundException, IOException
 	{
 		try
 		{
@@ -78,6 +69,8 @@ public class DownloadInfo implements ILinkDataSource
 				}
 			}
 			in.close();
+			
+			return getLinkDataStack();
 		}
 		catch (UncorrectLinkException e)
 		{

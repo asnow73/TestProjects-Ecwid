@@ -1,5 +1,6 @@
 package ru.albertroom.ecwidtesttask.downloader;
 
+//Information about the link and names for saving
 public class LinkData
 {
 	private String urlLink;

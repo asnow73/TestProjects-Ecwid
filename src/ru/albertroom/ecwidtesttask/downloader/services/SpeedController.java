@@ -1,10 +1,10 @@
 package ru.albertroom.ecwidtesttask.downloader.services;
 
-
+//Class to controll the downloading speed
 public class SpeedController implements ISpeedController
 {
 	private int limitBytesInSecond;
-	private int downloadedBytes;
+	private int allowedToDownloadBytes;
 	
 	private long startSecond;
 	private long currentTime;
@@ -14,7 +14,7 @@ public class SpeedController implements ISpeedController
 	public SpeedController(int limitBytes)
 	{
 		limitBytesInSecond = limitBytes;
-		downloadedBytes = 0;
+		allowedToDownloadBytes = 0;
 	}
 	
 	public void start()
@@ -23,6 +23,7 @@ public class SpeedController implements ISpeedController
 		startSecond = System.nanoTime();
 	}
 	
+	//Methos to get size of the allowed bytes to download
 	@Override
 	public synchronized int getAllowBytesToDownload()
 	{
@@ -32,17 +33,17 @@ public class SpeedController implements ISpeedController
 				
 		currentTime = System.nanoTime();
 		
-		if ((currentTime - startSecond) >= ONE_SECOND)
+		if ((currentTime - startSecond) >= ONE_SECOND) //one second passed
 		{
 			countSec++;
-			System.out.println("Second past " + String.valueOf(countSec) + ", downloaded " + String.valueOf(downloadedBytes));
-			downloadedBytes = 0;
+			System.out.println("Second past " + String.valueOf(countSec) + ", downloaded " + String.valueOf(allowedToDownloadBytes));
+			allowedToDownloadBytes = 0;
 			startSecond = currentTime;
 		}
 			
-		if (downloadedBytes < limitBytesInSecond) //если лимит не превышен
+		if (allowedToDownloadBytes < limitBytesInSecond) //if the limit is less than allowed to download bytes
 		{
-			int diff = limitBytesInSecond - downloadedBytes;
+			int diff = limitBytesInSecond - allowedToDownloadBytes;
 			if (diff >= DEFAULT_SIZE_PART_DATA)
 			{
 				allowBytes = DEFAULT_SIZE_PART_DATA;
@@ -51,7 +52,7 @@ public class SpeedController implements ISpeedController
 			{
 				allowBytes = diff;
 			}
-			downloadedBytes += allowBytes;
+			allowedToDownloadBytes += allowBytes;
 		}
 		
 		return allowBytes;

@@ -7,20 +7,19 @@ import ru.albertroom.ecwidtesttask.downloader.HttpDownloader;
 import ru.albertroom.ecwidtesttask.downloader.ThreadDownload;
 import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
 import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
-import ru.albertroom.ecwidtesttask.readlinkslist.ILinkDataSource;
 import ru.albertroom.ecwidtesttask.time.Timer;
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
 
-
+//Class to manage the downloading
 public class ManagerDownloading
 {
 	private int numberFilesForDownloading;	
 	private ArrayList<ThreadDownload> threads;
 	private int numberOfThreads;
 	private int downloadingSpeed;
-	ILinkDataSource linksData;
+	Stack<LinkData> linksData; //information about link
 	
-	public ManagerDownloading(int numberOfThreads, int downloadingSpeed, ILinkDataSource linksData)
+	public ManagerDownloading(int numberOfThreads, int downloadingSpeed, Stack<LinkData> linksData)
 	{
 		this.numberFilesForDownloading = 0;
 		this.threads = new ArrayList<ThreadDownload>(numberOfThreads);
@@ -56,7 +55,7 @@ public class ManagerDownloading
 	public void startDownloading()
 	{
 		Timer timer = new Timer();
-		DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();
+		DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //counting downloaded bytes
 		SpeedController speedControll = new SpeedController(downloadingSpeed);
 		
 		int num = 0;
@@ -70,9 +69,8 @@ public class ManagerDownloading
 			if (canCreateNewThread())
 			{
 				LinkData linkForDownload = linksData.pop();
-				HttpDownloader downloader = new HttpDownloader(linkForDownload.getLink());
-				
-				FileSaver saver = new FileSaver(linkForDownload.getSaveAsNames());
+				HttpDownloader downloader = new HttpDownloader(linkForDownload.getLink());				
+				FileSaver saver = new FileSaver(linkForDownload.getSaveAsNames()); //for saving downloaded files
 				
 				ThreadDownload thread = new ThreadDownload(downloader, "thread #" + String.valueOf(num), saver);				
 				downloader.setDownloadedBytesCounter(bytesCounter);
@@ -88,6 +86,7 @@ public class ManagerDownloading
 			try
 			{
 				Thread.sleep(250); //time pause between checking threads
+				Thread.yield();
 			}
 			catch (InterruptedException e)
 			{
