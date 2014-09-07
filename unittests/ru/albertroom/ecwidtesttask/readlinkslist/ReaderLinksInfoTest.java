@@ -3,54 +3,67 @@ package ru.albertroom.ecwidtesttask.readlinkslist;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Stack;
 
 import org.junit.Test;
 
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
 
-class ArrayStringLinksDataSource implements IDataLinksSource
-{
-	private String[] lines;
-	private int currentLine;
-	
-	public ArrayStringLinksDataSource(String[] lines)
-	{
-		this.lines = lines;
-		currentLine = 0;
-	}
-
-	@Override
-	public String readLine() throws IOException
-	{
-		String result = null;
-		if (currentLine < lines.length)
-		{
-			result = lines[currentLine];
-			currentLine++;
-		}
-		return result;
-	}
-}
-
 public class ReaderLinksInfoTest {
+
+	@Test
+	public void testRead_withException()
+	{
+		ReaderLinksInfo downloadInfo = new ReaderLinksInfo();
+		String[] lines = {"http://htmlbook.ru/files/images/blog/triangle-2.png"};
+		ArrayStringLinksDataSource dataSource = new ArrayStringLinksDataSource(lines);
+		
+		try
+		{
+			downloadInfo.read(dataSource);
+			fail( "Method 'read' threw exception, but he did not should do this" );
+		} 
+		catch (UncorrectLinkException e)
+		{
+		}
+		catch (IOException e)
+		{
+		}
+	}
 
 	@Test
 	public void testRead()
 	{
 		ReaderLinksInfo downloadInfo = new ReaderLinksInfo();
-		String[] lines = {"aaa", "bbb"};
+		String[] lines = new String[4];
+		
+		lines[0] = "http://htmlbook.ru/files/images/blog/triangle-2.png 2.png";
+		lines[1] = "http://htmlbook.ru/files/images/blog/triangle-2.png 2.png";
+		lines[2] = "http://htmlbook.ru/files/images/blog/triangle-2.png 5.png";
+		lines[3] = "http://aquasantop.ru/img/catphotos/68/2(218).jpg 3.jpg";
+		
 		ArrayStringLinksDataSource dataSource = new ArrayStringLinksDataSource(lines);
 		
-		try {
+		try
+		{
 			Stack<LinkData> linksData = downloadInfo.read(dataSource);
-		} catch (UncorrectLinkException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			assertEquals(2, linksData.size());
+			assertEquals("http://htmlbook.ru/files/images/blog/triangle-2.png", linksData.elementAt(0).getLink() );
+			assertEquals(2, linksData.elementAt(0).getSaveAsNames().length );
+			Arrays.sort(linksData.elementAt(0).getSaveAsNames());
+			assertEquals("2.png", linksData.elementAt(0).getSaveAsNames()[0] );
+			assertEquals("5.png", linksData.elementAt(0).getSaveAsNames()[1] );
+			
+			assertEquals("http://aquasantop.ru/img/catphotos/68/2(218).jpg", linksData.elementAt(1).getLink() );
+			assertEquals(1, linksData.elementAt(1).getSaveAsNames().length );
+			assertEquals("3.jpg", linksData.elementAt(1).getSaveAsNames()[0] );
+		} 
+		catch (UncorrectLinkException e)
+		{
+		}
+		catch (IOException e)
+		{
 		}
 	}
-
 }

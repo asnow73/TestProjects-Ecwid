@@ -5,8 +5,6 @@
 
 package ru.albertroom.ecwidtesttask;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.Stack;
 
 import ru.albertroom.ecwidtesttask.downloader.LinkData;

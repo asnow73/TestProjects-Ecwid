@@ -26,6 +26,7 @@ public class ReaderLinksInfo
 			HashSet<String> names = links.get(key);
 			String[] saveAsNames = names.toArray(new String[names.size()]);
 			stack.add(new LinkData(key, saveAsNames));
+			links.remove(key);
 		}
 		return stack;
 	}
@@ -54,13 +55,11 @@ public class ReaderLinksInfo
 		}
 	}
 	
-	//public Stack<LinkData> read(String pathToLinksFile) throws UncorrectLinkException, FileNotFoundException, IOException
 	public Stack<LinkData> read(IDataLinksSource source) throws UncorrectLinkException, IOException
 	{
 		try
 		{
 			String linkInf;
-			//BufferedReader in = new BufferedReader(new FileReader(pathToLinksFile));
 			while ((linkInf = source.readLine()) != null)
 			{
 				String[] strs = linkInf.split(" ");
@@ -69,8 +68,6 @@ public class ReaderLinksInfo
 					addLink(strs[0], strs[1]);
 				}
 			}
-			//source.close();
-			
 			return getLinkDataStack();
 		}
 		catch (UncorrectLinkException e)
@@ -78,15 +75,5 @@ public class ReaderLinksInfo
 			System.out.println(e.getMessage());
 			throw e;
 		}
-		//catch (FileNotFoundException e)
-		//{
-		//	System.out.println("File " + pathToLinksFile + " not founded");
-		//	throw e;
-		//}
-		//catch (IOException e)
-		//{
-		//	System.out.println("File read error");
-		//	throw e;
-		//}
 	}
 }
