@@ -5,9 +5,13 @@
 
 package ru.albertroom.ecwidtesttask;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.Stack;
+
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
-import ru.albertroom.ecwidtesttask.readlinkslist.FileReaderLinksInfo;
+import ru.albertroom.ecwidtesttask.readlinkslist.FileLinksDataSource;
+import ru.albertroom.ecwidtesttask.readlinkslist.ReaderLinksInfo;
 
 public class Main
 {
@@ -28,8 +32,10 @@ public class Main
 			System.out.println(pathToLinks);
 			System.out.println(saveFolder);
 			
-			FileReaderLinksInfo downloadInfo = new FileReaderLinksInfo();
-			Stack<LinkData> linksData = downloadInfo.read(pathToLinks);
+			ReaderLinksInfo downloadInfo = new ReaderLinksInfo();
+			FileLinksDataSource dataSource = new FileLinksDataSource(pathToLinks);			
+			Stack<LinkData> linksData = downloadInfo.read(dataSource);
+			dataSource.close();
 			
 			ManagerDownloading manager = new ManagerDownloading(countThreads, downloadingSpeed, linksData);			
 			manager.startDownloading();
