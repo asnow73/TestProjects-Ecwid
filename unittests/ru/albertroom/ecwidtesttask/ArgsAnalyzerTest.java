@@ -1,9 +1,7 @@
 package ru.albertroom.ecwidtesttask;
 
 import static org.junit.Assert.*;
-
 import java.util.ArrayList;
-
 import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 

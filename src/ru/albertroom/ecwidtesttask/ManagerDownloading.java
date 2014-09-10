@@ -7,6 +7,7 @@ import ru.albertroom.ecwidtesttask.downloader.HttpDownloader;
 import ru.albertroom.ecwidtesttask.downloader.ThreadDownload;
 import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
 import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
+import ru.albertroom.ecwidtesttask.time.Chronometer;
 import ru.albertroom.ecwidtesttask.time.Timer;
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
 
@@ -56,13 +57,13 @@ public class ManagerDownloading
 	{
 		Timer timer = new Timer();
 		DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //counting downloaded bytes
-		SpeedController speedControll = new SpeedController(downloadingSpeed);
+		SpeedController speedControll = new SpeedController(downloadingSpeed, new Chronometer(1000000000));
 		
 		int num = 0;
 		numberFilesForDownloading = linksData.size();
 		
 		timer.start();
-		speedControll.start();
+		//speedControll.start();
 
 		while (!isDownloadFinished())
 		{
