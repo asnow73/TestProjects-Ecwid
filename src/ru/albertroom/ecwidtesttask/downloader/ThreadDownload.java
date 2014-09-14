@@ -32,6 +32,7 @@ public class ThreadDownload extends Thread
 		{
 			byte[] bytes = downloader.download();
 			saver.save(bytes); //saving downloaded bytes
+			System.out.println("Download " + getName() + " finished.");
 		}
 		catch (Exception e)
 		{
@@ -41,6 +42,5 @@ public class ThreadDownload extends Thread
 			sb.append(e.getMessage());
 			System.out.println(sb.toString());
 		}
-		System.out.println("Download " + getName() + " finished.");
 	}
 }

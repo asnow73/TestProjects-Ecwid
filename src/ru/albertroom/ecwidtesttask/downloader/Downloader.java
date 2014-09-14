@@ -1,65 +1,23 @@
 package ru.albertroom.ecwidtesttask.downloader;
 
-import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 
 import ru.albertroom.ecwidtesttask.downloader.services.IDownloadingHandler;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
-//Class to download the file from the link
-public class HttpDownloader implements IDownloader
+class Downloader implements IDownloader
 {
-	private Downloader downloader;
-	private URL source;
-	private BufferedInputStream inStream;
-	
-	public HttpDownloader(String url)
-	{
-		try
-		{
-			source = new URL(url);
-			inStream = new BufferedInputStream(source.openStream());
-			this.downloader = new Downloader(inStream);
-		}
-		catch (IOException e)
-		{
-			System.out.println("Error downloading ");
-		}				
-	}
-	
-	//Set the service to counting downloaded bytes
-	public void setDownloadedBytesCounter(IDownloadingHandler bytesCounter)
-	{
-		downloader.setDownloadedBytesCounter(bytesCounter);
-	}
-	
-	//Set the service to controll the downloading speed
-	public void setSpeedController(ISpeedController speedControll)
-	{
-		downloader.setSpeedController(speedControll);
-	}
-	
-	@Override
-	public byte[] download()
-	{	
-		return downloader.download();
-	}
-	
-	/*
-	private String urlForDownload;
 	private IDownloadingHandler downloadedBytesCounter; //counting downloaded bytes
 	private ISpeedController speedController; //controll the downloading speed
-	
-	private URL source;
-	private BufferedInputStream inStream;
 	private ByteArrayOutputStream outStream;
+	private InputStream inStream;
 	
-	public HttpDownloader(String url)
+	public Downloader(InputStream inStream)
 	{
-		this.urlForDownload = url;
-		this.downloadedBytesCounter = null;
-		this.speedController = null;
+		this.inStream = inStream;
+		this.outStream = new ByteArrayOutputStream();
 	}
 	
 	//Set the service to counting downloaded bytes
@@ -72,24 +30,6 @@ public class HttpDownloader implements IDownloader
 	public void setSpeedController(ISpeedController speedControll)
 	{
 		speedController = speedControll;
-	}
-	
-	private void initStreams() throws IOException
-	{
-		source = new URL(urlForDownload);
-		inStream = new BufferedInputStream(source.openStream());
-		outStream = new ByteArrayOutputStream();
-	}
-	
-	private void flush() throws IOException
-	{
-		outStream.flush();
-	}
-	
-	private void closeStreams() throws IOException
-	{
-		inStream.close();
-		outStream.close();
 	}
 	
 	//Download the portion of bytes
@@ -122,27 +62,25 @@ public class HttpDownloader implements IDownloader
 		}
 		return size;
 	}
-
+	
 	@Override
 	public byte[] download()
 	{
 		int result = 0;
 		try
 		{
-			initStreams();
 			while (result >= 0)
 			{
 				int allowBytesToDownload = getSizeBuffer();			
 				result = getBytes(allowBytesToDownload);
 			}
-			flush();
-			closeStreams();
+			outStream.flush();
+			outStream.close();
 		}
 		catch (IOException e)
 		{
 			System.out.println("Error downloading ");
 		}
 		return outStream.toByteArray();
-	}*/
-
+	}
 }

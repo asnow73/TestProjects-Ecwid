@@ -2,10 +2,10 @@ package ru.albertroom.ecwidtesttask;
 
 import java.util.*; 
 
-import ru.albertroom.ecwidtesttask.downloader.FileSaver;
 import ru.albertroom.ecwidtesttask.downloader.HttpDownloader;
 import ru.albertroom.ecwidtesttask.downloader.ThreadDownload;
 import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
+import ru.albertroom.ecwidtesttask.downloader.services.FileSaver;
 import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
 import ru.albertroom.ecwidtesttask.time.Chronometer;
 import ru.albertroom.ecwidtesttask.time.Timer;
@@ -55,15 +55,15 @@ public class ManagerDownloading
 	
 	public void startDownloading()
 	{
+		final long ONE_SECOND = 1000000000;
 		Timer timer = new Timer();
 		DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //counting downloaded bytes
-		SpeedController speedControll = new SpeedController(downloadingSpeed, new Chronometer(1000000000));
+		SpeedController speedControll = new SpeedController(downloadingSpeed, new Chronometer(ONE_SECOND));
 		
 		int num = 0;
 		numberFilesForDownloading = linksData.size();
 		
 		timer.start();
-		//speedControll.start();
 
 		while (!isDownloadFinished())
 		{

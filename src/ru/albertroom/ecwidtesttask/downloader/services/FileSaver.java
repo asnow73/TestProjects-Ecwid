@@ -1,8 +1,10 @@
-package ru.albertroom.ecwidtesttask.downloader;
+package ru.albertroom.ecwidtesttask.downloader.services;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import ru.albertroom.ecwidtesttask.downloader.IDownloadSave;
 
 //Class to save array of bytes to file(s)
 public class FileSaver implements IDownloadSave
