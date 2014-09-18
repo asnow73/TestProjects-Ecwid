@@ -43,106 +43,14 @@ public class HttpDownloader implements IDownloader
 	@Override
 	public byte[] download()
 	{	
-		return downloader.download();
-	}
-	
-	/*
-	private String urlForDownload;
-	private IDownloadingHandler downloadedBytesCounter; //counting downloaded bytes
-	private ISpeedController speedController; //controll the downloading speed
-	
-	private URL source;
-	private BufferedInputStream inStream;
-	private ByteArrayOutputStream outStream;
-	
-	public HttpDownloader(String url)
-	{
-		this.urlForDownload = url;
-		this.downloadedBytesCounter = null;
-		this.speedController = null;
-	}
-	
-	//Set the service to counting downloaded bytes
-	public void setDownloadedBytesCounter(IDownloadingHandler bytesCounter)
-	{
-		downloadedBytesCounter = bytesCounter;
-	}
-	
-	//Set the service to controll the downloading speed
-	public void setSpeedController(ISpeedController speedControll)
-	{
-		speedController = speedControll;
-	}
-	
-	private void initStreams() throws IOException
-	{
-		source = new URL(urlForDownload);
-		inStream = new BufferedInputStream(source.openStream());
-		outStream = new ByteArrayOutputStream();
-	}
-	
-	private void flush() throws IOException
-	{
-		outStream.flush();
-	}
-	
-	private void closeStreams() throws IOException
-	{
-		inStream.close();
-		outStream.close();
-	}
-	
-	//Download the portion of bytes
-	private int getBytes(int size) throws IOException
-	{
-		final int START_BUFFER_OFFSET = 0;
-		int result = 0;		
-		byte[] data = new byte[size];
-		
-		result = inStream.read(data);
-		if (result >= 0)
-		{
-			outStream.write(data, START_BUFFER_OFFSET, result);
-			if (downloadedBytesCounter != null)
-			{
-				downloadedBytesCounter.onDataDownloaded(result); //report about downloaded bytes
-			}
-		}
-
-		return result;
-	}
-		
-	private int getSizeBuffer()
-	{
-		final int DEFAULT_SIZE_BUFFER = 3000;
-		int size = DEFAULT_SIZE_BUFFER;
-		if (speedController != null)
-		{
-			size = speedController.getAllowBytesToDownload(); //ask how many bytes allow to download
-		}
-		return size;
-	}
-
-	@Override
-	public byte[] download()
-	{
-		int result = 0;
-		try
-		{
-			initStreams();
-			while (result >= 0)
-			{
-				int allowBytesToDownload = getSizeBuffer();			
-				result = getBytes(allowBytesToDownload);
-			}
-			flush();
-			closeStreams();
+		byte[] result = downloader.download();
+		try {
+			inStream.close();
 		}
 		catch (IOException e)
 		{
 			System.out.println("Error downloading ");
 		}
-		return outStream.toByteArray();
-	}*/
-
+		return result;
+	}
 }
