@@ -3,8 +3,7 @@ package ru.albertroom.ecwidtesttask.downloader;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
-
-import ru.albertroom.ecwidtesttask.downloader.services.IDownloadingHandler;
+import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesCounter;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
 //Class to download the file from the link
@@ -14,30 +13,29 @@ public class HttpDownloader implements IDownloader
 	private URL source;
 	private BufferedInputStream inStream;
 	
-	public HttpDownloader(String url)
+	private void init(String url)
 	{
 		try
 		{
 			source = new URL(url);
 			inStream = new BufferedInputStream(source.openStream());
-			this.downloader = new Downloader(inStream);
 		}
 		catch (IOException e)
 		{
 			System.out.println("Error downloading ");
-		}				
+		}	
 	}
 	
-	//Set the service to counting downloaded bytes
-	public void setDownloadedBytesCounter(IDownloadingHandler bytesCounter)
+	public HttpDownloader(String url)
 	{
-		downloader.setDownloadedBytesCounter(bytesCounter);
+		init(url);
+		this.downloader = new Downloader(inStream);			
 	}
 	
-	//Set the service to controll the downloading speed
-	public void setSpeedController(ISpeedController speedControll)
+	public HttpDownloader(String url, IDownloadedBytesCounter bytesCounter, ISpeedController speedControll)
 	{
-		downloader.setSpeedController(speedControll);
+		init(url);
+		this.downloader = new Downloader(inStream, bytesCounter, speedControll);
 	}
 	
 	@Override

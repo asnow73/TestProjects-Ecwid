@@ -3,13 +3,12 @@ package ru.albertroom.ecwidtesttask.downloader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import ru.albertroom.ecwidtesttask.downloader.services.IDownloadingHandler;
+import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesCounter;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
 class Downloader implements IDownloader
 {
-	private IDownloadingHandler downloadedBytesCounter; //counting downloaded bytes
+	private IDownloadedBytesCounter downloadedBytesCounter; //counting downloaded bytes
 	private ISpeedController speedController; //controll the downloading speed
 	private ByteArrayOutputStream outStream;
 	private InputStream inStream;
@@ -18,22 +17,19 @@ class Downloader implements IDownloader
 	{
 		this.inStream = inStream;
 		this.outStream = new ByteArrayOutputStream();
+		this.downloadedBytesCounter = null;
+		this.speedController = null;
 	}
 	
-	//Set the service to counting downloaded bytes
-	public void setDownloadedBytesCounter(IDownloadingHandler bytesCounter)
+	public Downloader(InputStream inStream, IDownloadedBytesCounter bytesCounter, ISpeedController speedControll)
 	{
-		downloadedBytesCounter = bytesCounter;
-	}
-	
-	//Set the service to controll the downloading speed
-	public void setSpeedController(ISpeedController speedControll)
-	{
-		speedController = speedControll;
+		this(inStream);
+		this.downloadedBytesCounter = bytesCounter;
+		this.speedController = speedControll;
 	}
 	
 	//Download the portion of bytes
-	private int getBytes(int size) throws IOException
+	private int downloadBytes(int size) throws IOException
 	{
 		final int START_BUFFER_OFFSET = 0;
 		int result = 0;		
@@ -51,7 +47,7 @@ class Downloader implements IDownloader
 
 		return result;
 	}
-		
+	
 	private int getSizeBuffer()
 	{
 		final int DEFAULT_SIZE_BUFFER = 3000;
@@ -72,7 +68,7 @@ class Downloader implements IDownloader
 			while (result >= 0)
 			{
 				int allowBytesToDownload = getSizeBuffer();			
-				result = getBytes(allowBytesToDownload);
+				result = downloadBytes(allowBytesToDownload);
 			}
 			outStream.flush();
 			outStream.close();

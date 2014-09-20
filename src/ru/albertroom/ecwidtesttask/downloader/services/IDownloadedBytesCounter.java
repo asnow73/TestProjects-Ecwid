@@ -1,6 +1,6 @@
 package ru.albertroom.ecwidtesttask.downloader.services;
 
-public interface IDownloadingHandler
+public interface IDownloadedBytesCounter
 {
 	void onDataDownloaded(int sizeDownloadedBytes);
 }
