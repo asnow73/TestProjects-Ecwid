@@ -7,6 +7,7 @@ package ru.albertroom.ecwidtesttask;
 
 import java.util.Stack;
 
+import ru.albertroom.ecwidtesttask.downloader.FactoryThreadHttpDownload;
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
 import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
 import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
@@ -34,8 +35,8 @@ public class Main
 			System.out.println(pathToLinks);
 			System.out.println(saveFolder);
 			
+			FileLinksDataSource dataSource = new FileLinksDataSource(pathToLinks);
 			ReaderLinksInfo downloadInfo = new ReaderLinksInfo();
-			FileLinksDataSource dataSource = new FileLinksDataSource(pathToLinks);			
 			Stack<LinkData> linksData = downloadInfo.read(dataSource);
 			dataSource.close();
 			
@@ -43,9 +44,11 @@ public class Main
 			Timer timer = new Timer();
 			DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //counting downloaded bytes
 			SpeedController speedControll = new SpeedController(downloadingSpeed, new Chronometer(ONE_SECOND));
+			FactoryThreadHttpDownload factoryThreads = new FactoryThreadHttpDownload(linksData, bytesCounter, speedControll);
 			timer.start();
 			
-			ManagerDownloading manager = new ManagerDownloading(countThreads, linksData, bytesCounter, speedControll);
+			//ManagerDownloading manager = new ManagerDownloading(countThreads, linksData, bytesCounter, speedControll);
+			ManagerDownloading manager = new ManagerDownloading(countThreads, factoryThreads);
 			manager.startDownloading();
 			
 			timer.finish();
