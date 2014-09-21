@@ -1,18 +1,18 @@
 package ru.albertroom.ecwidtesttask.readlinkslist;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Stack;
-import java.io.*;
 
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
 
 //Class to read links data from file 
-public class FileReaderLinksInfo
+public class ReaderLinksInfo
 {
 	private Hashtable<String, HashSet<String>> links;
 	
-	public FileReaderLinksInfo()
+	public ReaderLinksInfo()
 	{
 		this.links = new Hashtable<String, HashSet<String>>();
 	}
@@ -26,6 +26,7 @@ public class FileReaderLinksInfo
 			HashSet<String> names = links.get(key);
 			String[] saveAsNames = names.toArray(new String[names.size()]);
 			stack.add(new LinkData(key, saveAsNames));
+			links.remove(key);
 		}
 		return stack;
 	}
@@ -54,13 +55,12 @@ public class FileReaderLinksInfo
 		}
 	}
 	
-	public Stack<LinkData> read(String pathToLinksFile) throws UncorrectLinkException, FileNotFoundException, IOException
+	public Stack<LinkData> read(IDataLinksSource source) throws UncorrectLinkException, IOException
 	{
 		try
 		{
 			String linkInf;
-			BufferedReader in = new BufferedReader(new FileReader(pathToLinksFile));
-			while ((linkInf = in.readLine()) != null)
+			while ((linkInf = source.readLine()) != null)
 			{
 				String[] strs = linkInf.split(" ");
 				if (isLinkCorrect(strs))
@@ -68,23 +68,11 @@ public class FileReaderLinksInfo
 					addLink(strs[0], strs[1]);
 				}
 			}
-			in.close();
-			
 			return getLinkDataStack();
 		}
 		catch (UncorrectLinkException e)
 		{
 			System.out.println(e.getMessage());
-			throw e;
-		}
-		catch (FileNotFoundException e)
-		{
-			System.out.println("File " + pathToLinksFile + " not founded");
-			throw e;
-		}
-		catch (IOException e)
-		{
-			System.out.println("File read error");
 			throw e;
 		}
 	}

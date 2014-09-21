@@ -1,7 +1,7 @@
 package ru.albertroom.ecwidtesttask.downloader.services;
 
 //Class to the counting downloaded bytes
-public class DownloadedBytesCounter implements IDownloadingHandler
+public class DownloadedBytesCounter implements IDownloadedBytesCounter
 {
 	private int totalSizeData;
 	
