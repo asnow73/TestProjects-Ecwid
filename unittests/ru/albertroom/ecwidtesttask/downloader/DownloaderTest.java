@@ -1,9 +1,6 @@
 package ru.albertroom.ecwidtesttask.downloader;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
@@ -12,7 +9,7 @@ import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
 import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
 
 public class DownloaderTest {
-
+	
 	@Test
 	public void testDownload()
 	{
