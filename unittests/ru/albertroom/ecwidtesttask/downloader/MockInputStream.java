@@ -5,25 +5,35 @@ import java.io.InputStream;
 
 public class MockInputStream extends InputStream
 {
-	private boolean finished;
 	private byte[] source;
+	private int position;
 	
 	public MockInputStream()
 	{
 		source = new byte[] {0,1,2,3,4};
-		finished = false;
+		position = 0;
 	}
 	
 	public int read(byte[] b)
 	{
-		if (!finished)
+		
+		int count = 0;
+		if (position != source.length)
 		{
-			finished = true;
-			for (int i = 0; i < source.length; ++i)
+			for (int i = 0; i < b.length; ++i)
 			{
-				b[i] = source[i];
+				if (position == source.length)
+				{
+					break;
+				}
+				else
+				{
+				  b[i] = source[position];
+				  position++;
+				  count++;
+				}
 			}
-			return source.length;
+			return count;
 		}
 		else
 		{

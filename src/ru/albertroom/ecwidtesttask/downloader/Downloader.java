@@ -6,7 +6,7 @@ import java.io.InputStream;
 import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesCounter;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
-class Downloader implements IDownloader
+public class Downloader implements IDownloader
 {
 	private IDownloadedBytesCounter downloadedBytesCounter; //counting downloaded bytes
 	private ISpeedController speedController; //controll the downloading speed

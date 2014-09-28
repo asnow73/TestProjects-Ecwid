@@ -1,6 +1,7 @@
 package ru.albertroom.ecwidtesttask;
 
 import java.util.*;
+
 import ru.albertroom.ecwidtesttask.downloader.IFactoryThreadDownload;
 import ru.albertroom.ecwidtesttask.downloader.ThreadDownload;
 
@@ -11,7 +12,7 @@ public class ManagerDownloading
 	private int numberOfThreads;
 	private IFactoryThreadDownload factoryThreads;
 	
-	public ManagerDownloading(int numberOfThreads, IFactoryThreadDownload factoryThreads)
+	public ManagerDownloading(int numberOfThreads, IFactoryThreadDownload factoryThreads)	
 	{
 		this.threads = new ArrayList<ThreadDownload>(numberOfThreads);
 		this.numberOfThreads = numberOfThreads;
@@ -39,7 +40,7 @@ public class ManagerDownloading
 		}
 	}
 	
-	public void startDownloading()
+	public void startDownloading() throws InterruptedException
 	{
 		while (!isDownloadFinished())
 		{
@@ -49,17 +50,9 @@ public class ManagerDownloading
 				threads.add(thread);
 				thread.start();
 			}
-			
 			removeFinishedThreads();
-			try
-			{
-				Thread.sleep(250); //time pause between checking threads
-				Thread.yield();
-			}
-			catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
+			Thread.sleep(250); //time pause between checking threads
+			Thread.yield();
 		}
 	}
 }
