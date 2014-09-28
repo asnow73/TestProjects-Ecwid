@@ -40,7 +40,7 @@ public class ManagerDownloading
 		}
 	}
 	
-	public void startDownloading()
+	public void startDownloading() throws InterruptedException
 	{
 		while (!isDownloadFinished())
 		{
@@ -50,18 +50,9 @@ public class ManagerDownloading
 				threads.add(thread);
 				thread.start();
 			}
-			
 			removeFinishedThreads();
-			//Thread.yield();
-			/*try
-			{
-				Thread.sleep(250); //time pause between checking threads
-				Thread.yield();
-			}
-			catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}*/
+			Thread.sleep(250); //time pause between checking threads
+			Thread.yield();
 		}
 	}
 }

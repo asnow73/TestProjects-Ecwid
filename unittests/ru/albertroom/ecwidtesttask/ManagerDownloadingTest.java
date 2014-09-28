@@ -19,12 +19,10 @@ public class ManagerDownloadingTest {
 	@Test
 	public void testStartDownloading()
 	{
-		//проверка на то, что программа не качает больше x байт в период времени t
-		
-		
-		//создать byteCounter
+		//проверка на то, что программа не качает больше x байт в период времени t		
 		final long TIME_PERIOD = 10000000;
 		
+		//создать byteCounter
 		DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //counting downloaded bytes
 		//контроллер скорости с малым периодом времени
 		SpeedController speedControll = new SpeedController(1, new Chronometer(TIME_PERIOD)); //1 байт в 1/100 с
@@ -49,14 +47,15 @@ public class ManagerDownloadingTest {
 		long startTime = 0;
 		startTime = System.nanoTime();
 		
-		manager.startDownloading();
+		try {
+			manager.startDownloading();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		long finishTime = 0;
 		finishTime = System.nanoTime();
-		
-		//System.out.println("Speed is " + String.valueOf((finishTime - startTime)/(bytesCounter.getTotalSizeDownloadedData()))  );
-		//System.out.println("Downloaded " + String.valueOf(bytesCounter.getTotalSizeDownloadedData()) + " bytes" );
-		//проверяем количество скачанных байт / время <= скрорости
 		
 		assertEquals(true, (finishTime - startTime)/(bytesCounter.getTotalSizeDownloadedData()) > TIME_PERIOD );
 		
