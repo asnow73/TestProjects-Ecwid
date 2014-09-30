@@ -39,7 +39,7 @@ public class Main
 			Timer timer = new Timer();
 			DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //counting downloaded bytes
 			SpeedController speedControll = new SpeedController(downloadingSpeed, new Chronometer(ONE_SECOND));
-			FactoryThreadHttpDownload factoryThreads = new FactoryThreadHttpDownload(linksData, bytesCounter, speedControll);
+			FactoryThreadHttpDownload factoryThreads = new FactoryThreadHttpDownload(linksData, saveFolder, bytesCounter, speedControll);
 			timer.start();
 			
 			//ManagerDownloading manager = new ManagerDownloading(countThreads, linksData, bytesCounter, speedControll);
@@ -54,7 +54,6 @@ public class Main
 		catch (Exception e)
 		{
 			System.out.print("Error. " + e.getMessage() +" Programm is finished");
-		}
-		
+		}		
 	}
 }

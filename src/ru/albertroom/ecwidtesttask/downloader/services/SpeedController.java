@@ -9,8 +9,6 @@ public class SpeedController implements ISpeedController
 	private int allowedToDownloadBytes; //количество байтов уже разрешённых для скачивания
 	private IChronometer period; //хронометр
 	
-	//int countSec = 0;
-	
 	public SpeedController(int limitBytes, IChronometer timePeriod)
 	{
 		this.limitBytesInTimePeriod = limitBytes;
@@ -28,8 +26,7 @@ public class SpeedController implements ISpeedController
 				
 		if (period.isTimePassed()) //заданный период времеени закончился
 		{
-			//countSec++;
-			//System.out.println("Second past " + String.valueOf(countSec) + ", downloaded " + String.valueOf(allowedToDownloadBytes));
+			System.out.print('.'); //TODO отдельный модуль для индикации прогресса
 			allowedToDownloadBytes = 0;
 			
 			//снова начинаем отслеживать период времени

@@ -4,7 +4,7 @@ package ru.albertroom.ecwidtesttask.downloader;
 public class LinkData
 {
 	private String urlLink; //URL адрес
-	private String[] saveAsNames; //имена под которыми надо сохранить скачагнный файл
+	private String[] saveAsNames; //имена под которыми надо сохранить файл
 	
 	public LinkData(String urlLink, String[] saveAsNames)
 	{

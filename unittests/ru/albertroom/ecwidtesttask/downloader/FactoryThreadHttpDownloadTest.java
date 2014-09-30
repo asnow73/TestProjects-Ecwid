@@ -19,7 +19,7 @@ public class FactoryThreadHttpDownloadTest {
 		IDownloadedBytesCounter mockByteCounter = mock(IDownloadedBytesCounter.class);
 		ISpeedController mockSpeedControll = mock(ISpeedController.class);
 		
-		FactoryThreadHttpDownload factory = new FactoryThreadHttpDownload(linksData, mockByteCounter, mockSpeedControll);
+		FactoryThreadHttpDownload factory = new FactoryThreadHttpDownload(linksData, "saveFolder", mockByteCounter, mockSpeedControll);
 		assertEquals(false, factory.canCreateThread());
 		
 		linksData.add(mock(LinkData.class));
@@ -33,7 +33,7 @@ public class FactoryThreadHttpDownloadTest {
 		IDownloadedBytesCounter mockByteCounter = mock(IDownloadedBytesCounter.class);
 		ISpeedController mockSpeedControll = mock(ISpeedController.class);
 		
-		FactoryThreadHttpDownload factory = new FactoryThreadHttpDownload(linksData, mockByteCounter, mockSpeedControll);
+		FactoryThreadHttpDownload factory = new FactoryThreadHttpDownload(linksData, "saveFolder", mockByteCounter, mockSpeedControll);
 		assertEquals(null, factory.makeThreadDownload());
 		
 		linksData.add(mock(LinkData.class));		

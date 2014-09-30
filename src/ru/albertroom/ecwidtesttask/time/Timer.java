@@ -15,14 +15,12 @@ public class Timer
 	//начать замер
 	public void start()
 	{
-		System.out.println("Timer started");
 		startTime = System.nanoTime();
 	}
 	
 	//закончить замер
 	public void finish()
 	{
-		System.out.println("Timer finished");
 		finishTime = System.nanoTime();
 	}
 	
