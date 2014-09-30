@@ -11,7 +11,7 @@ public class FactoryThreadHttpDownload implements IFactoryThreadDownload
 	private int number;	
 	private IDownloadedBytesCounter bytesCounter;
 	private ISpeedController speedControll;
-	private Stack<LinkData> linksData; //information about link
+	private Stack<LinkData> linksData; //стек ссылок для скачивания
 	
 	public FactoryThreadHttpDownload(Stack<LinkData> linksData, IDownloadedBytesCounter bytesCounter, ISpeedController speedControll)
 	{
@@ -21,6 +21,7 @@ public class FactoryThreadHttpDownload implements IFactoryThreadDownload
 		this.linksData = linksData;
 	}
 	
+	//Возможно ли создание потока для скачивания
 	public boolean canCreateThread()
 	{
 		return (!linksData.empty());
@@ -33,8 +34,8 @@ public class FactoryThreadHttpDownload implements IFactoryThreadDownload
 		{
 			number++;
 			LinkData linkForDownload = linksData.pop();
-			HttpDownloader downloader = new HttpDownloader(linkForDownload.getLink(), bytesCounter, speedControll);
-			FileSaver saver = new FileSaver(linkForDownload.getSaveAsNames()); //for saving downloaded files
+			HttpDownloader downloader = new HttpDownloader(linkForDownload.getLink(), bytesCounter, speedControll);			
+			FileSaver saver = new FileSaver(linkForDownload.getSaveAsNames());
 			result = new ThreadDownload(downloader, "thread #" + String.valueOf(number), saver);
 		}
 		return result;

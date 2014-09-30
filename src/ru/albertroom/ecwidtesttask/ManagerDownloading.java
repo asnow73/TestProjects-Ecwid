@@ -5,7 +5,7 @@ import java.util.*;
 import ru.albertroom.ecwidtesttask.downloader.IFactoryThreadDownload;
 import ru.albertroom.ecwidtesttask.downloader.ThreadDownload;
 
-//Class to manage the downloading
+//Класс для управления потоками закачек
 public class ManagerDownloading
 {	
 	private ArrayList<ThreadDownload> threads;
@@ -51,7 +51,8 @@ public class ManagerDownloading
 				thread.start();
 			}
 			removeFinishedThreads();
-			Thread.sleep(250); //time pause between checking threads
+			//пауза между проверками потоков на завершённость
+			Thread.sleep(250);
 			Thread.yield();
 		}
 	}

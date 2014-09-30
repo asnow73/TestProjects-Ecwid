@@ -28,12 +28,7 @@ public class Main
 			int countThreads = argsParser.getNumberOfThreads();
 			int downloadingSpeed = argsParser.getDownloadingSpeedLimit();
 			String pathToLinks = argsParser.getPathToLinksList();
-			String saveFolder = argsParser.getSaveFolder();
-			
-			System.out.println(countThreads);
-			System.out.println(downloadingSpeed);
-			System.out.println(pathToLinks);
-			System.out.println(saveFolder);
+			String saveFolder = argsParser.getSaveFolder(); //TODO использовать при сохранении файлов
 			
 			FileLinksDataSource dataSource = new FileLinksDataSource(pathToLinks);
 			ReaderLinksInfo downloadInfo = new ReaderLinksInfo();
@@ -58,7 +53,7 @@ public class Main
 		}
 		catch (Exception e)
 		{
-			System.out.print("Error. Programm is finished");
+			System.out.print("Error. " + e.getMessage() +" Programm is finished");
 		}
 		
 	}

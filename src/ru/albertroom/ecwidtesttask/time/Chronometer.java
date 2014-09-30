@@ -1,5 +1,6 @@
 package ru.albertroom.ecwidtesttask.time;
 
+//Класс для отсчёта периода времени
 public class Chronometer implements IChronometer
 {
 	private long startTime;

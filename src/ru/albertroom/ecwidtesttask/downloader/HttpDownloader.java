@@ -6,7 +6,7 @@ import java.net.URL;
 import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesCounter;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
-//Class to download the file from the link
+//Класс для скачивания файла по URL ссылке
 public class HttpDownloader implements IDownloader
 {
 	private Downloader downloader;
@@ -42,7 +42,8 @@ public class HttpDownloader implements IDownloader
 	public byte[] download()
 	{	
 		byte[] result = downloader.download();
-		try {
+		try
+		{
 			inStream.close();
 		}
 		catch (IOException e)

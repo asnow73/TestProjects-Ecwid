@@ -1,11 +1,6 @@
-/*
- * Project: Ecwid Test Task 
- * Author: Galiullov Albert
-*/
-
 package ru.albertroom.ecwidtesttask.downloader;
 
-//Class for downloading in the individual thread
+//Класс, реализующий поток для скачивания
 public class ThreadDownload extends Thread
 {
 	private IDownloader downloader;
@@ -31,7 +26,7 @@ public class ThreadDownload extends Thread
 		try
 		{
 			byte[] bytes = downloader.download();
-			saver.save(bytes); //saving downloaded bytes
+			saver.save(bytes);
 			System.out.println("Download " + getName() + " finished.");
 		}
 		catch (Exception e)

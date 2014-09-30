@@ -1,10 +1,10 @@
 package ru.albertroom.ecwidtesttask.downloader;
 
-//Information about the link and names for saving
+//Информация о ссылке для скачивания
 public class LinkData
 {
-	private String urlLink;
-	private String[] saveAsNames;
+	private String urlLink; //URL адрес
+	private String[] saveAsNames; //имена под которыми надо сохранить скачагнный файл
 	
 	public LinkData(String urlLink, String[] saveAsNames)
 	{

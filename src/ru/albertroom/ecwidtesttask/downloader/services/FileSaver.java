@@ -6,15 +6,16 @@ import java.io.IOException;
 
 import ru.albertroom.ecwidtesttask.downloader.IDownloadSave;
 
-//Class to save array of bytes to file(s)
+//Класс для сохранения массива байтов в файл(ы)
 public class FileSaver implements IDownloadSave
 {
-	private String[] fileNames;
+	private String[] fileNames; //имена файлов, под которыми надо сохранить массив байтов 
 	public FileSaver(String[] fileNames)
 	{
 		this.fileNames = fileNames;
 	}
 
+	//Сохранить байты
 	@Override
 	public void save(byte[] bytes)
 	{

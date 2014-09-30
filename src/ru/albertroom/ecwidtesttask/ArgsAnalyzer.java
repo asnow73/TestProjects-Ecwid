@@ -2,7 +2,7 @@ package ru.albertroom.ecwidtesttask;
 
 import org.apache.commons.cli.*;
 
-//Class for parsing command line parameters
+// ласс дл€ парсинга командной строки с параметрами
 public class ArgsAnalyzer
 {	
 	private Options options = new Options();	
@@ -58,7 +58,7 @@ public class ArgsAnalyzer
 		}
 	}
 	
-	//Method to get the number of threads
+	//ѕолучить количество одновременно качающих потоков
 	public int getNumberOfThreads() throws ParseException
 	{
 		int threadsNumber = 0;	
@@ -74,7 +74,7 @@ public class ArgsAnalyzer
 		return threadsNumber;
 	}
 	
-	//Method to get the speed of downloading
+	//ѕолучить значение общего ограничени€ на скорость скачивани€
 	public int getDownloadingSpeedLimit() throws ParseException
 	{
 		final int KBYTES = 1024;
@@ -110,13 +110,13 @@ public class ArgsAnalyzer
 		return speedLimit;
 	}
 	
-	//Method to get the folder for saving downloaded files
+	//ѕолучить им€ папки, куда складывать скачанные файлы
 	public String getSaveFolder() throws ParseException
 	{
 		return cmd.getOptionValue(FOLDER_SAVE_PARAM);
 	}
 	
-	//Method to get the path to file with links for download
+	//путь к файлу со списком ссылок
 	public String getPathToLinksList() throws ParseException
 	{
 		return cmd.getOptionValue(FILE_LINKS_PARAM);

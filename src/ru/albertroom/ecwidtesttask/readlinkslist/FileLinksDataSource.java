@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+//Класс для чтения файла, содержащего ссылки для скачивания формата
 public class FileLinksDataSource implements IDataLinksSource
 {
 	private BufferedReader file;
@@ -22,6 +23,7 @@ public class FileLinksDataSource implements IDataLinksSource
 		}
 	}
 
+	//Прочитать строку из файла
 	@Override
 	public String readLine() throws IOException
 	{

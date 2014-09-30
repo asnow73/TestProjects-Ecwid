@@ -1,6 +1,6 @@
 package ru.albertroom.ecwidtesttask.downloader.services;
 
-//Class to the counting downloaded bytes
+//Класс для организации подсчёта скачанных байтов
 public class DownloadedBytesCounter implements IDownloadedBytesCounter
 {
 	private int totalSizeData;
@@ -10,11 +10,13 @@ public class DownloadedBytesCounter implements IDownloadedBytesCounter
 		this.totalSizeData = 0;
 	}
 	
+	//Учесть sizeDownloadedBytes скачанных байтов
 	public synchronized void onDataDownloaded(int sizeDownloadedBytes)
 	{		
 		totalSizeData += sizeDownloadedBytes;
 	}
 	
+	//Вернуть общее количество посчитанных байтов
 	public int getTotalSizeDownloadedData()
 	{
 		return totalSizeData;

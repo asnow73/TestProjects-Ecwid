@@ -7,7 +7,7 @@ import java.util.Stack;
 
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
 
-//Class to read links data from file 
+//Класс для формирования стека с описаниями ссылок для скачивания
 public class ReaderLinksInfo
 {
 	private Hashtable<String, HashSet<String>> links;
@@ -17,6 +17,7 @@ public class ReaderLinksInfo
 		this.links = new Hashtable<String, HashSet<String>>();
 	}
 	
+	//Формирование стека с описанием ссылок для скачивания
 	private Stack<LinkData> getLinkDataStack()
 	{
 		Stack<LinkData> stack = new Stack<LinkData>();
@@ -31,13 +32,13 @@ public class ReaderLinksInfo
 		return stack;
 	}
 	
-	private boolean isLinkCorrect(String[] strs) throws UncorrectLinkException
+	//Проверка корректности ссылки
+	private boolean isLinkCorrect(String[] strs)
 	{
 		boolean result = true;
 		if (strs.length != 2)
 		{
-			result = false;
-			throw new UncorrectLinkException("Link is not correct");
+			result = false;			
 		}
 		return result;
 	}
@@ -55,25 +56,23 @@ public class ReaderLinksInfo
 		}
 	}
 	
+	//Прочиьтать из источника ссылки, установленного формата. Возвращается стек с описанием ссылок для скачивания
+	//Пример ссылки: http://example.com/archive.zip my_archive.zip
 	public Stack<LinkData> read(IDataLinksSource source) throws UncorrectLinkException, IOException
 	{
-		try
+		String linkInf;
+		while ((linkInf = source.readLine()) != null)
 		{
-			String linkInf;
-			while ((linkInf = source.readLine()) != null)
+			String[] strs = linkInf.split(" ");
+			if (isLinkCorrect(strs))
 			{
-				String[] strs = linkInf.split(" ");
-				if (isLinkCorrect(strs))
-				{
-					addLink(strs[0], strs[1]);
-				}
+				addLink(strs[0], strs[1]);
 			}
-			return getLinkDataStack();
+			else
+			{
+				throw new UncorrectLinkException("Link is not correct");
+			}
 		}
-		catch (UncorrectLinkException e)
-		{
-			System.out.println(e.getMessage());
-			throw e;
-		}
+		return getLinkDataStack();
 	}
 }
