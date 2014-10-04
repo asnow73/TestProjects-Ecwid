@@ -14,11 +14,6 @@ public class ArgsAnalyzerTest {
 	{
 		parser = new ArgsAnalyzer();
 	}
-/*
-	@Before
-	public void setUp() throws Exception {
-	}
-*/
 	
 	@Test
 	public void testParse() 
@@ -49,6 +44,23 @@ public class ArgsAnalyzerTest {
 				//do nothing
 			}
 		}
+	}
+	
+	@Test
+	public void testParseResult() 
+	{
+		boolean haveArgs = false;
+		try {
+			haveArgs = parser.parse(args);
+			assertEquals(haveArgs, true);
+			
+			haveArgs = parser.parse(new String[]{"-help"});
+			assertEquals(haveArgs, false);
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		}		
 	}
 	
 	@Test

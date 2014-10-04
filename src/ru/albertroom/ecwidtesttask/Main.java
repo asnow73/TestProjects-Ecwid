@@ -23,31 +23,34 @@ public class Main
 		try
 		{
 			ArgsAnalyzer argsParser = new ArgsAnalyzer();
-			argsParser.parse(args);
+			boolean haveArgsForDownload = argsParser.parse(args);
 			
-			int countThreads = argsParser.getNumberOfThreads();
-			int downloadingSpeed = argsParser.getDownloadingSpeedLimit();
-			String pathToLinks = argsParser.getPathToLinksList();
-			String saveFolder = argsParser.getSaveFolder();
-			
-			FileLinksDataSource dataSource = new FileLinksDataSource(pathToLinks);
-			ReaderLinksInfo downloadInfo = new ReaderLinksInfo();
-			Stack<LinkData> linksData = downloadInfo.read(dataSource);
-			dataSource.close();
-			
-			final long ONE_SECOND = 1000000000;
-			Timer timer = new Timer();
-			DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //подсчёт скачанных байтов
-			SpeedController speedControll = new SpeedController(downloadingSpeed, new Chronometer(ONE_SECOND)); //контроль скорости скачавания
-			FactoryThreadHttpDownload factoryThreads = new FactoryThreadHttpDownload(linksData, saveFolder, bytesCounter, speedControll); //фабрика потоков для скачивания
-			timer.start();
-			
-			ManagerDownloading manager = new ManagerDownloading(countThreads, factoryThreads); //управление процессом скачивания
-			manager.startDownloading();
-			
-			timer.finish();
-			System.out.println("Working time is " + String.valueOf(timer.getTotalTime()) + " ms" );
-			System.out.println("Downloaded " + String.valueOf(bytesCounter.getTotalSizeDownloadedData()) + " bytes" );
+			if (haveArgsForDownload)
+			{
+				int countThreads = argsParser.getNumberOfThreads();
+				int downloadingSpeed = argsParser.getDownloadingSpeedLimit();
+				String pathToLinks = argsParser.getPathToLinksList();
+				String saveFolder = argsParser.getSaveFolder();
+				
+				FileLinksDataSource dataSource = new FileLinksDataSource(pathToLinks);
+				ReaderLinksInfo downloadInfo = new ReaderLinksInfo();
+				Stack<LinkData> linksData = downloadInfo.read(dataSource);
+				dataSource.close();
+				
+				final long ONE_SECOND = 1000000000;
+				Timer timer = new Timer();
+				DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //подсчёт скачанных байтов
+				SpeedController speedControll = new SpeedController(downloadingSpeed, new Chronometer(ONE_SECOND)); //контроль скорости скачавания
+				FactoryThreadHttpDownload factoryThreads = new FactoryThreadHttpDownload(linksData, saveFolder, bytesCounter, speedControll); //фабрика потоков для скачивания
+				timer.start();
+				
+				ManagerDownloading manager = new ManagerDownloading(countThreads, factoryThreads); //управление процессом скачивания
+				manager.startDownloading();
+				
+				timer.finish();
+				System.out.println("Working time is " + String.valueOf(timer.getTotalTime()) + " ms" );
+				System.out.println("Downloaded " + String.valueOf(bytesCounter.getTotalSizeDownloadedData()) + " bytes" );
+			}
 
 		}
 		catch (Exception e)

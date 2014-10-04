@@ -4,19 +4,23 @@ import org.apache.commons.cli.*;
 
 //Класс для парсинга командной строки с параметрами
 public class ArgsAnalyzer
-{	
-	private Options options = new Options();	
+{
 	private CommandLine cmd;
 	
 	private final String THREADS_PARAM = "n";
 	private final String SPEED_PARAM = "l"; 
 	private final String FOLDER_SAVE_PARAM = "o";
 	private final String FILE_LINKS_PARAM = "f";
+	private final String HELP_PARAM = "help";
 	
 	public ArgsAnalyzer()
 	{
 		cmd = null;
-		
+	}
+	
+	private Options getBaseParamsOptions()
+	{
+		Options options = new Options();
 		Option oThreadsNumber = new Option(THREADS_PARAM, true, "number of threads");
 		oThreadsNumber.setArgs(1);
 		oThreadsNumber.setRequired(true);
@@ -40,22 +44,49 @@ public class ArgsAnalyzer
 		oLinksList.setRequired(true);
 		oLinksList.setArgName("linksList");
 		options.addOption(oLinksList);
+		return options;
 	}
 	
-	public void parse(String[] args) throws ParseException
+	private Options getHelpOptions()
 	{
+		Options options = new Options();
+		Option oHelp = new Option(HELP_PARAM, "usage information");
+		oHelp.setRequired(false);
+		oHelp.setArgName("help");
+		options.addOption(oHelp);
+		return options;
+	}
+	
+	public boolean parse(String[] args) throws ParseException
+	{
+		boolean result = true;
+		
 		CommandLineParser parser = new PosixParser();
 		HelpFormatter formatter = new HelpFormatter();
+		Options options = getBaseParamsOptions();
 		try
-		{
+		{			
+			
 			cmd = parser.parse( options, args);
 		}		
 		catch (ParseException e) 
 		{
+			Options optionsHelp = getHelpOptions();			
+			cmd = parser.parse( optionsHelp, args);
+			if (cmd.hasOption("help"))
+			{
+				formatter.printHelp( "utility", options );
+				result = false;
+			}
+			else
+			{
 			System.out.println( "Parsing failed. Reason: " + e.getMessage() );
 			formatter.printHelp( "utility", options );
 			throw e;
+			}
 		}
+		
+		return result;
 	}
 	
 	//Получить количество одновременно качающих потоков
