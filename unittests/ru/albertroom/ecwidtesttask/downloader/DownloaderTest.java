@@ -32,7 +32,7 @@ public class DownloaderTest {
 		
 		SpeedController mockSpeedController = mock(SpeedController.class);
 		DownloadedBytesCounter mockBytesCounter = mock(DownloadedBytesCounter.class);
-		Downloader downloader = new Downloader(mockInStream, mockBytesCounter, mockSpeedController);
+		Downloader downloader = new Downloader(mockInStream, mockBytesCounter, mockSpeedController, null);
 		
 		when(mockSpeedController.getAllowBytesToDownload()).thenReturn(mockInStream.getBytes().length);
 		downloader.download();

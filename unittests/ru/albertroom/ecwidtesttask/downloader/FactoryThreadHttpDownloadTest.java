@@ -7,7 +7,7 @@ import java.util.Stack;
 
 import org.junit.Test;
 
-import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesCounter;
+import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesEvent;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
 public class FactoryThreadHttpDownloadTest {
@@ -16,7 +16,7 @@ public class FactoryThreadHttpDownloadTest {
 	public void testcanCreateThread()
 	{
 		Stack<LinkData> linksData = new Stack<LinkData>();		
-		IDownloadedBytesCounter mockByteCounter = mock(IDownloadedBytesCounter.class);
+		IDownloadedBytesEvent mockByteCounter = mock(IDownloadedBytesEvent.class);
 		ISpeedController mockSpeedControll = mock(ISpeedController.class);
 		
 		FactoryThreadHttpDownload factory = new FactoryThreadHttpDownload(linksData, "saveFolder", mockByteCounter, mockSpeedControll);
@@ -30,7 +30,7 @@ public class FactoryThreadHttpDownloadTest {
 	public void testMakeThreadDownload()
 	{
 		Stack<LinkData> linksData = new Stack<LinkData>();		
-		IDownloadedBytesCounter mockByteCounter = mock(IDownloadedBytesCounter.class);
+		IDownloadedBytesEvent mockByteCounter = mock(IDownloadedBytesEvent.class);
 		ISpeedController mockSpeedControll = mock(ISpeedController.class);
 		
 		FactoryThreadHttpDownload factory = new FactoryThreadHttpDownload(linksData, "saveFolder", mockByteCounter, mockSpeedControll);

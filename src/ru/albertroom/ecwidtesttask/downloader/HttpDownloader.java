@@ -3,7 +3,7 @@ package ru.albertroom.ecwidtesttask.downloader;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
-import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesCounter;
+import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesEvent;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
 //Класс для скачивания файла по URL ссылке
@@ -32,10 +32,10 @@ public class HttpDownloader implements IDownloader
 		this.downloader = new Downloader(inStream);			
 	}
 	
-	public HttpDownloader(String url, IDownloadedBytesCounter bytesCounter, ISpeedController speedControll)
+	public HttpDownloader(String url, IDownloadedBytesEvent bytesCounter, ISpeedController speedControll, IDownloadedBytesEvent progressVisualisator)
 	{
 		init(url);
-		this.downloader = new Downloader(inStream, bytesCounter, speedControll);
+		this.downloader = new Downloader(inStream, bytesCounter, speedControll, progressVisualisator);
 	}
 	
 	@Override

@@ -14,7 +14,7 @@ public class SpeedController implements ISpeedController
 		this.limitBytesInTimePeriod = limitBytes;
 		this.allowedToDownloadBytes = 0;
 		this.period = timePeriod;
-		timePeriod.start();
+		this.period.start();
 	}
 
 	//Получить количество байт, которые можно скачать на данный момент
@@ -26,7 +26,7 @@ public class SpeedController implements ISpeedController
 				
 		if (period.isTimePassed()) //заданный период времеени закончился
 		{
-			System.out.print('.'); //TODO отдельный модуль для индикации прогресса
+			//System.out.print('.'); //TODO отдельный модуль для индикации прогресса
 			allowedToDownloadBytes = 0;
 			
 			//снова начинаем отслеживать период времени

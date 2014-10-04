@@ -3,13 +3,14 @@ package ru.albertroom.ecwidtesttask.downloader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesCounter;
+import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesEvent;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
 //Класс для скачивания данных из входного потока
 public class Downloader implements IDownloader
 {
-	private IDownloadedBytesCounter downloadedBytesCounter; //подсчёт скачанных байтов	
+	private IDownloadedBytesEvent downloadedProgressIndicator;
+	private IDownloadedBytesEvent downloadedBytesCounter; //подсчёт скачанных байтов	
 	private ISpeedController speedController; //контроль скорости скачивания
 	private ByteArrayOutputStream outStream;
 	private InputStream inStream;
@@ -22,11 +23,12 @@ public class Downloader implements IDownloader
 		this.speedController = null;
 	}
 	
-	public Downloader(InputStream inStream, IDownloadedBytesCounter bytesCounter, ISpeedController speedControll)
+	public Downloader(InputStream inStream, IDownloadedBytesEvent bytesCounter, ISpeedController speedControll, IDownloadedBytesEvent downloadedProgressIndicator)
 	{
 		this(inStream);
 		this.downloadedBytesCounter = bytesCounter;
 		this.speedController = speedControll;
+		this.downloadedProgressIndicator = downloadedProgressIndicator;
 	}
 	
 	//Скачать порцию байтов размером size
@@ -42,7 +44,12 @@ public class Downloader implements IDownloader
 			outStream.write(data, START_BUFFER_OFFSET, result);
 			if (downloadedBytesCounter != null)
 			{
-				downloadedBytesCounter.onDataDownloaded(result); //сообщить счетчику скачанных байтов о количестве скачанных байтов
+				downloadedBytesCounter.onDataDownloaded(result); //сообщить счетчику скачанных байтов о количестве скачанных байтов				
+			}
+			
+			if (downloadedProgressIndicator != null)
+			{
+				downloadedProgressIndicator.onDataDownloaded(result);
 			}
 		}
 

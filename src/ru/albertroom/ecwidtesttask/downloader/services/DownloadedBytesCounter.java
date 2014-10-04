@@ -1,7 +1,7 @@
 package ru.albertroom.ecwidtesttask.downloader.services;
 
 //Класс для организации подсчёта скачанных байтов
-public class DownloadedBytesCounter implements IDownloadedBytesCounter
+public class DownloadedBytesCounter implements IDownloadedBytesEvent
 {
 	private int totalSizeData;
 	

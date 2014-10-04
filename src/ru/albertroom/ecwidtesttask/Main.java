@@ -28,7 +28,7 @@ public class Main
 			int countThreads = argsParser.getNumberOfThreads();
 			int downloadingSpeed = argsParser.getDownloadingSpeedLimit();
 			String pathToLinks = argsParser.getPathToLinksList();
-			String saveFolder = argsParser.getSaveFolder(); //TODO использовать при сохранении файлов
+			String saveFolder = argsParser.getSaveFolder();
 			
 			FileLinksDataSource dataSource = new FileLinksDataSource(pathToLinks);
 			ReaderLinksInfo downloadInfo = new ReaderLinksInfo();
@@ -37,13 +37,12 @@ public class Main
 			
 			final long ONE_SECOND = 1000000000;
 			Timer timer = new Timer();
-			DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //counting downloaded bytes
-			SpeedController speedControll = new SpeedController(downloadingSpeed, new Chronometer(ONE_SECOND));
-			FactoryThreadHttpDownload factoryThreads = new FactoryThreadHttpDownload(linksData, saveFolder, bytesCounter, speedControll);
+			DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //подсчёт скачанных байтов
+			SpeedController speedControll = new SpeedController(downloadingSpeed, new Chronometer(ONE_SECOND)); //контроль скорости скачавания
+			FactoryThreadHttpDownload factoryThreads = new FactoryThreadHttpDownload(linksData, saveFolder, bytesCounter, speedControll); //фабрика потоков для скачивания
 			timer.start();
 			
-			//ManagerDownloading manager = new ManagerDownloading(countThreads, linksData, bytesCounter, speedControll);
-			ManagerDownloading manager = new ManagerDownloading(countThreads, factoryThreads);
+			ManagerDownloading manager = new ManagerDownloading(countThreads, factoryThreads); //управление процессом скачивания
 			manager.startDownloading();
 			
 			timer.finish();

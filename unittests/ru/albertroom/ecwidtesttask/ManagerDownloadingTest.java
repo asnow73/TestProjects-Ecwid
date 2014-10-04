@@ -1,7 +1,7 @@
 package ru.albertroom.ecwidtesttask;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+//import static org.mockito.Mockito.*;
 
 import java.io.InputStream;
 import java.util.Stack;
