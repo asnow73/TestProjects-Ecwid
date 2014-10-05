@@ -33,7 +33,7 @@ public class FactoryThreadHttpDownload implements IFactoryThreadDownload
 		return (!linksData.empty());
 	}
 	
-	public ThreadDownload makeThreadDownload()
+	public Thread makeThreadDownload()
 	{
 		ThreadDownload result = null;
 		if (canCreateThread())

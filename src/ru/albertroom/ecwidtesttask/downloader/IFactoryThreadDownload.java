@@ -2,6 +2,6 @@ package ru.albertroom.ecwidtesttask.downloader;
 
 public interface IFactoryThreadDownload
 {
-	ThreadDownload makeThreadDownload();
+	Thread makeThreadDownload();
 	boolean canCreateThread();
 }

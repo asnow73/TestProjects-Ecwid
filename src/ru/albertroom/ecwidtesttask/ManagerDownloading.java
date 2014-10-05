@@ -3,18 +3,17 @@ package ru.albertroom.ecwidtesttask;
 import java.util.*;
 
 import ru.albertroom.ecwidtesttask.downloader.IFactoryThreadDownload;
-import ru.albertroom.ecwidtesttask.downloader.ThreadDownload;
 
 //Класс для управления потоками закачек
 public class ManagerDownloading
 {	
-	private ArrayList<ThreadDownload> threads;
+	private ArrayList<Thread> threads;
 	private int numberOfThreads;
 	private IFactoryThreadDownload factoryThreads;
 	
 	public ManagerDownloading(int numberOfThreads, IFactoryThreadDownload factoryThreads)	
 	{
-		this.threads = new ArrayList<ThreadDownload>(numberOfThreads);
+		this.threads = new ArrayList<Thread>(numberOfThreads);
 		this.numberOfThreads = numberOfThreads;
 		this.factoryThreads = factoryThreads;
 	}
@@ -46,7 +45,7 @@ public class ManagerDownloading
 		{
 			if (canCreateNewThread())
 			{
-				ThreadDownload thread = factoryThreads.makeThreadDownload();
+				Thread thread = factoryThreads.makeThreadDownload();
 				threads.add(thread);
 				thread.start();
 			}

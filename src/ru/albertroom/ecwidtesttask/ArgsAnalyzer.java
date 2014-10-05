@@ -65,8 +65,7 @@ public class ArgsAnalyzer
 		HelpFormatter formatter = new HelpFormatter();
 		Options options = getBaseParamsOptions();
 		try
-		{			
-			
+		{						
 			cmd = parser.parse( options, args);
 		}		
 		catch (ParseException e) 
