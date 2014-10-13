@@ -1,0 +1,51 @@
+<project name="EcwidTestTask" default="all" >
+  <property name="libpath" value="../lib"/>
+  <property name="srcpath" value="../src"/>
+  <property name="binpath" value="bin"/>
+  <property name="classpath" value="class"/>
+  <property name="releasefile" value="download.jar"/>
+
+  <presetdef name="javac">
+    <javac includeantruntime="false" />
+  </presetdef>
+
+  <target name="make.dirs" description="Make some dirs">
+    <mkdir dir="${classpath}"/>
+    <mkdir dir="${binpath}"/>
+  </target>
+
+  <path id="myclasspath" >
+    <fileset dir="${libpath}">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="compile" description="compile java"  depends="make.dirs">
+    <javac destdir="${classpath}" classpathref="myclasspath">
+      <src path="${srcpath}"/>
+    </javac>
+  </target>
+
+  <target name="jar" description="make jar file" depends="compile">
+    <jar destfile="${binpath}/${releasefile}">
+      <fileset dir="${classpath}">
+        <include name="**/*.class"/>
+      </fileset>
+      <zipgroupfileset dir="${libpath}"/>
+      <manifest>
+        <attribute name="Class-Path" value="${libpath}"/>
+        <attribute name="Main-Class" value="ru.albertroom.ecwidtesttask.Main"/>
+      </manifest>
+      
+    </jar>
+  </target>
+
+  <target name="all" description="Do the build" depends="jar"/>
+
+  <target name="clean" description="clean up">
+    <echo>I'm cleaning up.</echo>
+    <delete dir="${classpath}"/>
+    <delete dir="${binpath}"/>
+  </target>
+
+</project>
