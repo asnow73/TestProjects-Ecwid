@@ -1,1 +1,1 @@
-java -cp download.jar ru.albertroom.ecwidtesttask.Main
+java -cp bin\download.jar ru.albertroom.ecwidtesttask.Main

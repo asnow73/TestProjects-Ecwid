@@ -1,39 +1,54 @@
 <project name="EcwidTestTask" default="all" >
-  <property name="libpath" value="../lib"/>
-  <property name="srcpath" value="../src"/>
-  <property name="binpath" value="bin"/>
-  <property name="classpath" value="class"/>
+  <property name="lib" value="../lib"/>
+  <property name="src" value="../src"/>
+  <property name="bin" value="bin"/>
+  <property name="class" value="class"/>
+  <property name="src.test" value="../unittests"/>
+  <property name="class.test" value="classtests"/>
   <property name="releasefile" value="download.jar"/>
+  <property name="reports.test" value="reportsTest"/>
 
   <presetdef name="javac">
     <javac includeantruntime="false" />
   </presetdef>
 
   <target name="make.dirs" description="Make some dirs">
-    <mkdir dir="${classpath}"/>
-    <mkdir dir="${binpath}"/>
+    <mkdir dir="${class}"/>
+    <mkdir dir="${bin}"/>
+    <mkdir dir="${class.test}"/>
+    <mkdir dir="${reports.test}"/>
   </target>
 
   <path id="myclasspath" >
-    <fileset dir="${libpath}">
-      <include name="**/*.jar"/>
+    <fileset dir="${lib}">
+      <include name="commons-cli-1.2.jar"/>
     </fileset>
   </path>
 
+  <path id="testClasspath" >
+    <fileset dir="${lib}">
+      <include name="commons-cli-1.2.jar"/>
+      <include name="junit-4.11.jar"/>
+      <include name="mockito-all-1.9.5.jar"/>
+    </fileset>
+    <pathelement location="${class}" /> 
+    <pathelement location="${class.test}" /> 
+  </path>
+
   <target name="compile" description="compile java"  depends="make.dirs">
-    <javac destdir="${classpath}" classpathref="myclasspath">
-      <src path="${srcpath}"/>
+    <javac includeantruntime="false" destdir="${class}" classpathref="myclasspath">
+      <src path="${src}"/>
     </javac>
   </target>
 
   <target name="jar" description="make jar file" depends="compile">
-    <jar destfile="${binpath}/${releasefile}">
-      <fileset dir="${classpath}">
+    <jar destfile="${bin}/${releasefile}">
+      <fileset dir="${class}">
         <include name="**/*.class"/>
       </fileset>
-      <zipgroupfileset dir="${libpath}"/>
+      <zipgroupfileset dir="${lib}" includes="commons-cli-1.2.jar"/>
       <manifest>
-        <attribute name="Class-Path" value="${libpath}"/>
+        <attribute name="Class-Path" value="${lib}"/>
         <attribute name="Main-Class" value="ru.albertroom.ecwidtesttask.Main"/>
       </manifest>
       
@@ -44,8 +59,30 @@
 
   <target name="clean" description="clean up">
     <echo>I'm cleaning up.</echo>
-    <delete dir="${classpath}"/>
-    <delete dir="${binpath}"/>
+    <delete dir="${class}"/>
+    <delete dir="${bin}"/>
+    <delete dir="${class.test}"/>
+    <delete dir="${reports.test}"/>
+  </target>
+
+  <target name="compile.test" description="Compilation of the tests" depends="compile">
+    <echo>Compiling tests....</echo>  
+    <javac includeantruntime="false" destdir="${class.test}" classpathref="testClasspath">
+      <src path="${src.test}"/>
+    </javac>
+  </target>
+  <target name="test" description="Start test EnglishTesting class" depends="compile.test">
+    <junit printsummary="yes" haltonerror="yes" haltonfailure="yes" fork="yes">
+      <classpath refid="testClasspath"/>
+
+      <formatter type="plain" usefile="false"/>
+      <formatter type="xml"/>
+      <batchtest todir="${reports.test}">
+        <fileset dir="${src.test}">
+          <include name="**/*Test*.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
   </target>
 
 </project>
