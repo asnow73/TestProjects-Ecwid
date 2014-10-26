@@ -1,21 +1,28 @@
 package ru.albertroom.ecwidtesttask;
 
 import static org.junit.Assert.*;
-//import static org.mockito.Mockito.*;
 
 import java.io.InputStream;
 import java.util.Stack;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ru.albertroom.ecwidtesttask.downloader.MockInputStream;
 import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
+import ru.albertroom.ecwidtesttask.downloader.services.Output;
 import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
 import ru.albertroom.ecwidtesttask.time.Chronometer;
 
 
 public class ManagerDownloadingTest {
 
+	@BeforeClass
+    public static void oneTimeSetUp()
+	{
+		Output.switchOff();
+    }
+	
 	@Test
 	public void testStartDownloading()
 	{

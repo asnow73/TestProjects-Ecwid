@@ -3,6 +3,7 @@ package ru.albertroom.ecwidtesttask;
 import java.util.*;
 
 import ru.albertroom.ecwidtesttask.downloader.IFactoryThreadDownload;
+import ru.albertroom.ecwidtesttask.downloader.services.Output;
 
 //Класс для управления потоками закачек
 public class ManagerDownloading
@@ -45,9 +46,18 @@ public class ManagerDownloading
 		{
 			if (canCreateNewThread())
 			{
-				Thread thread = factoryThreads.makeThreadDownload();
-				threads.add(thread);
-				thread.start();
+				Thread thread;
+				try
+				{
+					thread = factoryThreads.makeThreadDownload();
+					threads.add(thread);
+					thread.start();
+				}
+				catch (Exception e)
+				{
+					Output.println("Downloading error");
+				}
+				
 			}
 			removeFinishedThreads();
 			//пауза между проверками потоков на завершённость

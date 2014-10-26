@@ -2,6 +2,8 @@ package ru.albertroom.ecwidtesttask;
 
 import org.apache.commons.cli.*;
 
+import ru.albertroom.ecwidtesttask.downloader.services.Output;
+
 // ласс дл€ парсинга командной строки с параметрами
 public class ArgsAnalyzer
 {
@@ -72,17 +74,19 @@ public class ArgsAnalyzer
 		{
 			Options optionsHelp = getHelpOptions();			
 			cmd = parser.parse( optionsHelp, args);
+			Output.printHelpFormatter(formatter, options );
 			if (cmd.hasOption("help"))
 			{
-				formatter.printHelp( "utility", options );
+				//formatter.printHelp( "utility", options );
 				result = false;
 			}
 			else
 			{
-			System.out.println( "Parsing failed. Reason: " + e.getMessage() );
-			formatter.printHelp( "utility", options );
-			throw e;
+				Output.println( "Parsing failed. Reason: " + e.getMessage() );
+				//Output.printHelpFormatter(formatter, options );
+				throw e;
 			}
+			
 		}
 		
 		return result;
@@ -98,7 +102,7 @@ public class ArgsAnalyzer
 		}
 		catch (NumberFormatException e)
 		{
-			System.out.println("Error. Incorrect value for number of threads");
+			Output.println("Error. Incorrect value for number of threads");
 			throw e;
         }
 		return threadsNumber;
@@ -134,7 +138,7 @@ public class ArgsAnalyzer
 		}
 		catch (NumberFormatException e)
 		{
-			System.out.println("Error. Incorrect value for speed limit of downloading");
+			Output.println("Error. Incorrect value for speed limit of downloading");
 			throw e;
         }
 		return speedLimit;

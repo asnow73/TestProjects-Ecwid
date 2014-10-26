@@ -13,7 +13,7 @@ public class FactoryThreadHttpDownload implements IFactoryThreadDownload
 	private IDownloadedBytesEvent bytesCounter;
 	private ISpeedController speedControll;
 	private Stack<LinkData> linksData; //стек ссылок для скачивания
-	private String saveFolder; //директория, в которой
+	private String saveFolder; //директория, в которой сохраняются скачанные файлы
 	
 	private ProgressVisualisator progressVisualizator;
 	
@@ -33,7 +33,7 @@ public class FactoryThreadHttpDownload implements IFactoryThreadDownload
 		return (!linksData.empty());
 	}
 	
-	public Thread makeThreadDownload()
+	public Thread makeThreadDownload() throws Exception
 	{
 		ThreadDownload result = null;
 		if (canCreateThread())

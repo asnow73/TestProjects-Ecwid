@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import ru.albertroom.ecwidtesttask.downloader.services.Output;
+
 //Класс для чтения файла, содержащего ссылки для скачивания формата
 public class FileLinksDataSource implements IDataLinksSource
 {
@@ -18,7 +20,7 @@ public class FileLinksDataSource implements IDataLinksSource
 		}
 		catch (FileNotFoundException e)
 		{
-			System.out.println("Error. Can't open the file.");
+			Output.println("Error. Can't open the file.");
 			throw e;
 		}
 	}
@@ -34,7 +36,7 @@ public class FileLinksDataSource implements IDataLinksSource
 		} 
 		catch (IOException e)
 		{
-			System.out.println("Error of reading data");
+			Output.println("Error of reading data");
 			throw e;
 		}
 		return result;

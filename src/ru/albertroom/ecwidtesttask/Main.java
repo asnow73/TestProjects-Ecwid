@@ -10,6 +10,7 @@ import java.util.Stack;
 import ru.albertroom.ecwidtesttask.downloader.FactoryThreadHttpDownload;
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
 import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
+import ru.albertroom.ecwidtesttask.downloader.services.Output;
 import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
 import ru.albertroom.ecwidtesttask.readlinkslist.FileLinksDataSource;
 import ru.albertroom.ecwidtesttask.readlinkslist.ReaderLinksInfo;
@@ -48,14 +49,14 @@ public class Main
 				manager.startDownloading();
 				
 				timer.finish();
-				System.out.println("Working time is " + String.valueOf(timer.getTotalTime()) + " ms" );
-				System.out.println("Downloaded " + String.valueOf(bytesCounter.getTotalSizeDownloadedData()) + " bytes" );
+				Output.println("Working time is " + String.valueOf(timer.getTotalTime()) + " ms" );
+				Output.println("Downloaded " + String.valueOf(bytesCounter.getTotalSizeDownloadedData()) + " bytes" );
 			}
 
 		}
 		catch (Exception e)
 		{
-			System.out.print("Error. " + e.getMessage() +" Programm is finished");
+			Output.println("Error. " + e.getMessage() +" Programm is finished");
 		}		
 	}
 }

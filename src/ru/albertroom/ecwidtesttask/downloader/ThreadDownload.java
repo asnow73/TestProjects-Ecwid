@@ -1,5 +1,7 @@
 package ru.albertroom.ecwidtesttask.downloader;
 
+import ru.albertroom.ecwidtesttask.downloader.services.Output;
+
 //Класс, реализующий поток для скачивания
 public class ThreadDownload extends Thread
 {
@@ -16,7 +18,7 @@ public class ThreadDownload extends Thread
 	@Override
 	public void start()
 	{
-		System.out.println("Download " + getName() + " started.");
+		Output.println("Download " + getName() + " started.");
 		super.start();
 	}
 	
@@ -27,7 +29,7 @@ public class ThreadDownload extends Thread
 		{
 			byte[] bytes = downloader.download();
 			saver.save(bytes);
-			System.out.println("Download " + getName() + " finished.");
+			Output.println("Download " + getName() + " finished.");
 		}
 		catch (Exception e)
 		{
@@ -35,7 +37,7 @@ public class ThreadDownload extends Thread
 			sb.append(getName());
 			sb.append(" falled down with exception: ");
 			sb.append(e.getMessage());
-			System.out.println(sb.toString());
+			Output.println(sb.toString());
 		}
 	}
 }

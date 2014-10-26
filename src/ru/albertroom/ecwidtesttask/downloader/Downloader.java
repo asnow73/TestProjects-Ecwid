@@ -3,6 +3,7 @@ package ru.albertroom.ecwidtesttask.downloader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesEvent;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
@@ -70,23 +71,16 @@ public class Downloader implements IDownloader
 	}
 	
 	@Override
-	public byte[] download()
+	public byte[] download() throws IOException
 	{
 		int result = 0;
-		try
+		while (result >= 0)
 		{
-			while (result >= 0)
-			{
-				int allowBytesToDownload = getSizeBuffer();			
-				result = downloadPortionBytes(allowBytesToDownload);
-			}
-			outStream.flush();
-			outStream.close();
+			int allowBytesToDownload = getSizeBuffer();			
+			result = downloadPortionBytes(allowBytesToDownload);
 		}
-		catch (IOException e)
-		{
-			System.out.println("Error downloading ");
-		}
+		outStream.flush();
+		outStream.close();
 		return outStream.toByteArray();
 	}
 }

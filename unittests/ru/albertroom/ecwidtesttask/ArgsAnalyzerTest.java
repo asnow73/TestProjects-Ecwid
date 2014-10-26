@@ -1,9 +1,13 @@
 package ru.albertroom.ecwidtesttask;
 
 import static org.junit.Assert.*;
+
 import java.util.ArrayList;
+
 import org.apache.commons.cli.ParseException;
 import org.junit.Test;
+
+import ru.albertroom.ecwidtesttask.downloader.services.Output;
 
 public class ArgsAnalyzerTest {
 	
@@ -13,7 +17,10 @@ public class ArgsAnalyzerTest {
 	public ArgsAnalyzerTest()
 	{
 		parser = new ArgsAnalyzer();
+		Output.switchOff(); // запрет на вывод в консоль
 	}
+	
+	
 	
 	@Test
 	public void testParse() 
@@ -59,7 +66,8 @@ public class ArgsAnalyzerTest {
 		}
 		catch (ParseException e)
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
+			fail("testParseResult fail");
 		}		
 	}
 	

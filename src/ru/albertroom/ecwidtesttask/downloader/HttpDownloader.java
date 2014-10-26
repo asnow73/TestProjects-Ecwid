@@ -3,6 +3,7 @@ package ru.albertroom.ecwidtesttask.downloader;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
+
 import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesEvent;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
@@ -13,43 +14,29 @@ public class HttpDownloader implements IDownloader
 	private URL source;
 	private BufferedInputStream inStream;
 	
-	private void init(String url)
+	private void init(String url) throws IOException
 	{
-		try
-		{
-			source = new URL(url);
-			inStream = new BufferedInputStream(source.openStream());
-		}
-		catch (IOException e)
-		{
-			System.out.println("Error downloading ");
-		}	
+		source = new URL(url);
+		inStream = new BufferedInputStream(source.openStream());
 	}
 	
-	public HttpDownloader(String url)
+	public HttpDownloader(String url) throws Exception
 	{
 		init(url);
 		this.downloader = new Downloader(inStream);			
 	}
 	
-	public HttpDownloader(String url, IDownloadedBytesEvent bytesCounter, ISpeedController speedControll, IDownloadedBytesEvent progressVisualisator)
+	public HttpDownloader(String url, IDownloadedBytesEvent bytesCounter, ISpeedController speedControll, IDownloadedBytesEvent progressVisualisator) throws Exception
 	{
 		init(url);
 		this.downloader = new Downloader(inStream, bytesCounter, speedControll, progressVisualisator);
 	}
 	
 	@Override
-	public byte[] download()
+	public byte[] download() throws Exception
 	{	
 		byte[] result = downloader.download();
-		try
-		{
-			inStream.close();
-		}
-		catch (IOException e)
-		{
-			System.out.println("Error downloading ");
-		}
+		inStream.close();
 		return result;
 	}
 }

@@ -24,11 +24,10 @@ public class SpeedController implements ISpeedController
 		final int DEFAULT_SIZE_PART_DATA = 100;
 		int allowBytes = 0;
 				
-		if (period.isTimePassed()) //заданный период времеени закончился
+		//заданный период времеени закончился
+		if (period.isTimePassed())
 		{
-			//System.out.print('.'); //TODO отдельный модуль для индикации прогресса
-			allowedToDownloadBytes = 0;
-			
+			allowedToDownloadBytes = 0;			
 			//снова начинаем отслеживать период времени
 			period.start(); 
 		}

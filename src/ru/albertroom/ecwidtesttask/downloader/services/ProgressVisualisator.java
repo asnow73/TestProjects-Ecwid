@@ -18,7 +18,7 @@ public class ProgressVisualisator implements IDownloadedBytesEvent
 	{
 		if (period.isTimePassed()) //заданный период времеени закончился
 		{
-			System.out.print('.'); //индикация того, что работа ведётся, ничего не повисло			
+			Output.print('.'); //индикация того, что работа ведётся, ничего не повисло			
 			//снова начинаем отслеживать период времени
 			period.start(); 
 		}

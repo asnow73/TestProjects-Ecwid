@@ -49,7 +49,7 @@ public class FileSaver implements IDownloadSave
 			}
 			catch (IOException e)
 			{
-				System.out.println("Can not create file '" + path + "'");
+				Output.println("Can not create file '" + path + "'");
 			}
 
 		}
