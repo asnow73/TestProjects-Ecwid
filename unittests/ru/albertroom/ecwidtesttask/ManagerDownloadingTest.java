@@ -57,8 +57,7 @@ public class ManagerDownloadingTest {
 		try {
 			manager.startDownloading();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail( "testStartDownloading failed" );
 		}
 
 		long finishTime = 0;
@@ -66,6 +65,7 @@ public class ManagerDownloadingTest {
 		
 		assertEquals(true, (finishTime - startTime)/(bytesCounter.getTotalSizeDownloadedData()) > TIME_PERIOD );
 		
+		//TODO
 		//Проверка количесва активных потоков
 		
 		//Создать мок для быйт коунтера и на онДатаРеад проверять Thread.activeCount()

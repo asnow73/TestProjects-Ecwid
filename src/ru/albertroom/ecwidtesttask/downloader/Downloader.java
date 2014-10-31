@@ -57,7 +57,7 @@ public class Downloader implements IDownloader
 		return result;
 	}
 	
-	//Получить зазиер порции байтов, которве можно скачать
+	//Получить размер порции байтов, которве можно скачать
 	private int getSizeBuffer()
 	{
 		final int DEFAULT_SIZE_BUFFER = 3000;
@@ -81,6 +81,7 @@ public class Downloader implements IDownloader
 		}
 		outStream.flush();
 		outStream.close();
+		inStream.close();
 		return outStream.toByteArray();
 	}
 }

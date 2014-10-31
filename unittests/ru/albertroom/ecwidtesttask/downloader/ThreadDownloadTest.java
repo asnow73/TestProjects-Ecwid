@@ -20,8 +20,8 @@ public class ThreadDownloadTest
 	public void testThreadDownloadingRun()
 	{
 		FileSaver mockedSave = mock(FileSaver.class);
-		HttpDownloader mockedDownloader = mock(HttpDownloader.class);
-		ThreadDownload thread = new ThreadDownload(mockedDownloader, "threadName", mockedSave);
+		Downloader downloader = mock(Downloader.class);
+		ThreadDownload thread = new ThreadDownload(downloader, "threadName", mockedSave);
 		thread.start();
 		try {
 			thread.join();
@@ -32,8 +32,8 @@ public class ThreadDownloadTest
 		}
 		byte[] bytes;
 		try {
-			bytes = verify(mockedDownloader).download();
-			verify(mockedDownloader, times(1)).download();
+			bytes = verify(downloader).download();
+			verify(downloader, times(1)).download();
 			verify(mockedSave).save(bytes);
 			verify(mockedSave, times(1)).save(bytes);
 		}
