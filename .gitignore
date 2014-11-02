@@ -1,0 +1,15 @@
+/bin/
+
+*.png
+
+*.jpg
+
+*.class
+
+AntBuild/reportsTest
+
+AntBuild/bin
+
+AntBuild/class
+
+AntBuild/classtests
