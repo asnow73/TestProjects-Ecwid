@@ -18,7 +18,7 @@ public class ThreadDownload extends Thread
 	@Override
 	public void start()
 	{
-		Output.println("Download " + getName() + " started.");
+		Output.println("Download " + getName() + " started.");		
 		super.start();
 	}
 	

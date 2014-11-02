@@ -56,7 +56,7 @@ public class ReaderLinksInfo
 		}
 	}
 	
-	//Прочиьтать из источника ссылки, установленного формата. Возвращается стек с описанием ссылок для скачивания
+	//Прочитать из источника ссылки, установленного формата. Возвращается стек с описанием ссылок для скачивания
 	//Пример ссылки: http://example.com/archive.zip my_archive.zip
 	public Stack<LinkData> read(IDataLinksSource source) throws UncorrectLinkException, IOException
 	{

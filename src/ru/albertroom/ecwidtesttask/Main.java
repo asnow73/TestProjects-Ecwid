@@ -7,9 +7,11 @@ package ru.albertroom.ecwidtesttask;
 
 import java.util.Stack;
 
-import ru.albertroom.ecwidtesttask.downloader.FactoryThreadHttpDownload;
+import ru.albertroom.ecwidtesttask.downloader.FactoryHttpConnection;
+import ru.albertroom.ecwidtesttask.downloader.FactoryThreadDownload;
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
 import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
+import ru.albertroom.ecwidtesttask.downloader.services.FactoryFileSaver;
 import ru.albertroom.ecwidtesttask.downloader.services.Output;
 import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
 import ru.albertroom.ecwidtesttask.readlinkslist.FileLinksDataSource;
@@ -42,7 +44,10 @@ public class Main
 				Timer timer = new Timer();
 				DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //подсчёт скачанных байтов
 				SpeedController speedControll = new SpeedController(downloadingSpeed, new Chronometer(ONE_SECOND)); //контроль скорости скачавания
-				FactoryThreadHttpDownload factoryThreads = new FactoryThreadHttpDownload(linksData, saveFolder, bytesCounter, speedControll); //фабрика потоков для скачивания
+				
+				FactoryHttpConnection connectionMaker = new FactoryHttpConnection();
+				FactoryFileSaver factoryFileSaver = new FactoryFileSaver(saveFolder);
+				FactoryThreadDownload factoryThreads = new FactoryThreadDownload(linksData, connectionMaker, factoryFileSaver, bytesCounter, speedControll); //фабрика потоков для скачивания
 				timer.start();
 				
 				ManagerDownloading manager = new ManagerDownloading(countThreads, factoryThreads); //управление процессом скачивания

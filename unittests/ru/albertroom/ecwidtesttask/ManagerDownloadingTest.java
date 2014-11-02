@@ -1,21 +1,38 @@
 package ru.albertroom.ecwidtesttask;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
-import java.io.InputStream;
 import java.util.Stack;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
+import ru.albertroom.ecwidtesttask.downloader.FactoryThreadDownload;
+import ru.albertroom.ecwidtesttask.downloader.IDownloadSave;
+import ru.albertroom.ecwidtesttask.downloader.IFactoryConnection;
+import ru.albertroom.ecwidtesttask.downloader.LinkData;
 import ru.albertroom.ecwidtesttask.downloader.MockInputStream;
 import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
+import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesEvent;
+import ru.albertroom.ecwidtesttask.downloader.services.IFactorySaver;
+import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 import ru.albertroom.ecwidtesttask.downloader.services.Output;
 import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
 import ru.albertroom.ecwidtesttask.time.Chronometer;
 
 
-public class ManagerDownloadingTest {
+public class ManagerDownloadingTest
+{
+	private Stack<LinkData> linksData;
+	private IFactorySaver factorySaver;
+	private IFactoryConnection connectionMakerMock;
 
 	@BeforeClass
     public static void oneTimeSetUp()
@@ -23,33 +40,53 @@ public class ManagerDownloadingTest {
 		Output.switchOff();
     }
 	
-	@Test
-	public void testStartDownloading()
+	@Before
+	public void setUp()
 	{
-		//проверка на то, что программа не качает больше x байт в период времени t		
+		linksData = new Stack<LinkData>();
+		String m[] = {""};
+		linksData.add(new LinkData("", m));
+		linksData.add(new LinkData("", m));
+		linksData.add(new LinkData("", m));
+		
+		IDownloadSave saver = mock(IDownloadSave.class);
+		factorySaver = mock(IFactorySaver.class);
+		try {
+			doReturn(saver).when(factorySaver).makeSaver((String[]) anyObject());
+		}
+		catch (Exception e1)
+		{
+			fail( "FactoryThreeadHttpDownloadTest failed" );
+		}
+		
+		connectionMakerMock = mock(IFactoryConnection.class);
+		try {
+			doAnswer(new Answer() {
+			      public MockInputStream answer(InvocationOnMock invocation)
+			      {
+			    	  return new MockInputStream();
+			      }})
+			  .when(connectionMakerMock).makeConnection(anyString());
+		}
+		catch (Exception e1)
+		{
+			fail( "FactoryThreeadHttpDownloadTest failed" );
+		}
+    }
+	
+	//проверка на то, что программа не качает больше x байт в период времени t	
+	@Test
+	public void testSpeedDownloading()
+	{
+		final int COUNT_THREADS = 2;
 		final long TIME_PERIOD = 10000000;
 		
-		//создать byteCounter
-		DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();  //counting downloaded bytes
-		//контроллер скорости с малым периодом времени
-		SpeedController speedControll = new SpeedController(1, new Chronometer(TIME_PERIOD)); //1 байт в 1/100 с
+		DownloadedBytesCounter bytesCounter = new DownloadedBytesCounter();
+		//контроллер скорости с малым периодом времени //1 байт в 1/100 с
+		SpeedController speedControll = new SpeedController(1, new Chronometer(TIME_PERIOD));
 		
-		/*IFactoryThreadDownload mockFactory = mock(IFactoryThreadDownload.class);
-		FileSaver mockSaver =  mock(FileSaver.class);
-		MockInputStream mockInStream = new MockInputStream();
-		//Downloader downloader = new Downloader(mockInStream, bytesCounter, speedControll);
-		
-		when(mockFactory.makeThreadDownload()).thenReturn(new ThreadDownload(new Downloader(mockInStream, bytesCounter, speedControll), "threadname", mockSaver));
-		when(mockFactory.canCreateThread()).thenReturn(true);*/
-		
-		
-		Stack<InputStream> inStreams = new Stack<InputStream>();
-		inStreams.add(new MockInputStream());
-		inStreams.add(new MockInputStream());
-		MockFactoryThreadDownload mockFactory = new MockFactoryThreadDownload(inStreams, bytesCounter, speedControll);
-		
-		//старт скачки, фабрика тредов (2 треда, читать из массива ОЗУ)
-		ManagerDownloading manager = new ManagerDownloading(2, mockFactory);
+		FactoryThreadDownload factory = new FactoryThreadDownload(linksData, connectionMakerMock, factorySaver, bytesCounter, speedControll);		
+		ManagerDownloading manager = new ManagerDownloading(COUNT_THREADS, factory);
 		
 		long startTime = 0;
 		startTime = System.nanoTime();
@@ -57,18 +94,52 @@ public class ManagerDownloadingTest {
 		try {
 			manager.startDownloading();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail( "testStartDownloading failed" );
 		}
 
 		long finishTime = 0;
 		finishTime = System.nanoTime();
 		
-		assertEquals(true, (finishTime - startTime)/(bytesCounter.getTotalSizeDownloadedData()) > TIME_PERIOD );
-		
-		//Проверка количесва активных потоков
-		
-		//Создать мок для быйт коунтера и на онДатаРеад проверять Thread.activeCount()
+		int dowloadedBytes = bytesCounter.getTotalSizeDownloadedData();
+		assertEquals(true, (finishTime - startTime)/(dowloadedBytes) > TIME_PERIOD );
 	}
-
+	
+	//Проверка количесва активных потоков
+	@Test
+	public void testCountDownloadingThread()
+	{
+		final int COUNT_THREADS = 2;
+		final long TIME_PERIOD = 10000000;
+		
+		IDownloadedBytesEvent bytesCounter = mock(IDownloadedBytesEvent.class);
+		try {
+			doAnswer(new Answer() {
+			      public Object answer(InvocationOnMock invocation)
+			      {
+			    	  //Проверка количества потоков
+			    	  assertEquals(true, Thread.activeCount() <= COUNT_THREADS);
+			    	  return null;
+			      }})
+			  .when(connectionMakerMock).makeConnection(anyString());
+		}
+		catch (Exception e1)
+		{
+			fail( "FactoryThreeadHttpDownloadTest failed" );
+		}
+		
+		//контроллер скорости с малым периодом времени //1 байт в 1/100 с
+		SpeedController speedControll = new SpeedController(1, new Chronometer(TIME_PERIOD));
+		FactoryThreadDownload factory = new FactoryThreadDownload(linksData, connectionMakerMock, factorySaver, bytesCounter, speedControll);		
+		ManagerDownloading manager = new ManagerDownloading(COUNT_THREADS, factory);
+				
+		try 
+		{
+			manager.startDownloading();
+		} 
+		catch (InterruptedException e) 
+		{
+			fail( "testStartDownloading failed" );
+		}
+		
+	}
 }
