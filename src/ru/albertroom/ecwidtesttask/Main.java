@@ -11,6 +11,7 @@ import ru.albertroom.ecwidtesttask.downloader.FactoryHttpConnection;
 import ru.albertroom.ecwidtesttask.downloader.FactoryThreadDownload;
 import ru.albertroom.ecwidtesttask.downloader.LinkData;
 import ru.albertroom.ecwidtesttask.downloader.services.DownloadedBytesCounter;
+import ru.albertroom.ecwidtesttask.downloader.services.FactoryFileSaver;
 import ru.albertroom.ecwidtesttask.downloader.services.Output;
 import ru.albertroom.ecwidtesttask.downloader.services.SpeedController;
 import ru.albertroom.ecwidtesttask.readlinkslist.FileLinksDataSource;
@@ -45,7 +46,8 @@ public class Main
 				SpeedController speedControll = new SpeedController(downloadingSpeed, new Chronometer(ONE_SECOND)); //контроль скорости скачавания
 				
 				FactoryHttpConnection connectionMaker = new FactoryHttpConnection();
-				FactoryThreadDownload factoryThreads = new FactoryThreadDownload(linksData, connectionMaker, saveFolder, bytesCounter, speedControll); //фабрика потоков для скачивания
+				FactoryFileSaver factoryFileSaver = new FactoryFileSaver(saveFolder);
+				FactoryThreadDownload factoryThreads = new FactoryThreadDownload(linksData, connectionMaker, factoryFileSaver, bytesCounter, speedControll); //фабрика потоков для скачивания
 				timer.start();
 				
 				ManagerDownloading manager = new ManagerDownloading(countThreads, factoryThreads); //управление процессом скачивания

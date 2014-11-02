@@ -3,7 +3,7 @@ package ru.albertroom.ecwidtesttask.downloader;
 import java.io.InputStream;
 import java.util.Stack;
 
-import ru.albertroom.ecwidtesttask.downloader.services.FileSaver;
+import ru.albertroom.ecwidtesttask.downloader.services.IFactorySaver;
 import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesEvent;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 import ru.albertroom.ecwidtesttask.downloader.services.ProgressVisualisator;
@@ -11,21 +11,21 @@ import ru.albertroom.ecwidtesttask.downloader.services.ProgressVisualisator;
 public class FactoryThreadDownload implements IFactoryThreadDownload
 {
 	private int number;	
-	private IDownloadedBytesEvent bytesCounter;
-	private ISpeedController speedControll;
+	private IDownloadedBytesEvent bytesCounter; //подсчЄт скачанных байтов
+	private ISpeedController speedControll; //контроль скорости скачивани€
 	private Stack<LinkData> linksData; //стек ссылок дл€ скачивани€
-	private String saveFolder; //директори€, в которой сохран€ютс€ скачанные файлы
-	IFactoryConnection connectionMaker;
+	private IFactorySaver factorySaver; //фабрика по созданию объектов, сохран€ющих скачанные файлы
+	private IFactoryConnection connectionMaker; //фабрика по созданию входных потоков
 	
 	private ProgressVisualisator progressVisualizator;
 	
-	public FactoryThreadDownload(Stack<LinkData> linksData, IFactoryConnection connectionMaker, String saveFolder, IDownloadedBytesEvent bytesCounter, ISpeedController speedControll)
+	public FactoryThreadDownload(Stack<LinkData> linksData, IFactoryConnection connectionMaker, IFactorySaver factorySaver, IDownloadedBytesEvent bytesCounter, ISpeedController speedControll)
 	{
 		this.number = 0;
 		this.bytesCounter = bytesCounter;
 		this.speedControll = speedControll;
 		this.linksData = linksData;
-		this.saveFolder = saveFolder;
+		this.factorySaver = factorySaver;
 		this.connectionMaker = connectionMaker;
 		this.progressVisualizator = new ProgressVisualisator();
 	}
@@ -45,8 +45,7 @@ public class FactoryThreadDownload implements IFactoryThreadDownload
 			LinkData linkForDownload = linksData.pop();
 			InputStream inStream = connectionMaker.makeConnection(linkForDownload.getLink());			
 			Downloader downloader = new Downloader(inStream, bytesCounter, speedControll, progressVisualizator);			
-			
-			FileSaver saver = new FileSaver(linkForDownload.getSaveAsNames(), saveFolder);
+			IDownloadSave saver = factorySaver.makeSaver(linkForDownload.getSaveAsNames());
 			thread = new ThreadDownload(downloader, "thread #" + String.valueOf(number), saver);
 		}
 		return thread;

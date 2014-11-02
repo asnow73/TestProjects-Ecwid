@@ -2,48 +2,48 @@ package ru.albertroom.ecwidtesttask.downloader;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
-//import static org.mockito.Matchers.*;
-//import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Stack;
 
-//import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
-//import org.mockito.invocation.InvocationOnMock;
-//import org.mockito.stubbing.Answer;
 
 import ru.albertroom.ecwidtesttask.downloader.services.IDownloadedBytesEvent;
+import ru.albertroom.ecwidtesttask.downloader.services.IFactorySaver;
 import ru.albertroom.ecwidtesttask.downloader.services.ISpeedController;
 
-public class FactoryThreadHttpDownloadTest {
-
-	//@BeforeClass
-    //public static void oneTimeSetUp()
-	//{
-    //	Output.switchOff();
-    //}
+public class FactoryThreadHttpDownloadTest
+{
+	private IDownloadedBytesEvent mockByteCounter;
+	private ISpeedController mockSpeedControll;
+	private IFactoryConnection connectionMakerMock;
+	private IFactorySaver saverMock;
+	
+	@Before
+	public void setUp()
+	{
+		mockByteCounter = mock(IDownloadedBytesEvent.class);
+		mockSpeedControll = mock(ISpeedController.class);
+		saverMock = mock(IFactorySaver.class);
+		connectionMakerMock = mock(IFactoryConnection.class);
+		try {
+			MockInputStream mm = new MockInputStream();
+			doReturn(mm).when(connectionMakerMock).makeConnection(anyString());
+		}
+		catch (Exception e1)
+		{
+			fail( "FactoryThreeadHttpDownloadTest failed" );
+		}
+    }
 	
 	@Test
 	public void testCanCreateThread()
 	{
 		Stack<LinkData> linksData = new Stack<LinkData>();		
-		IDownloadedBytesEvent mockByteCounter = mock(IDownloadedBytesEvent.class);
-		ISpeedController mockSpeedControll = mock(ISpeedController.class);
-		
-		/*FactoryHttpConnection connectionMakerMock = mock(FactoryHttpConnection.class);
-		//when(connectionMakerMock.makeConnection(anyString())).thenReturn(new MockInputStream());
-		try {
-			when(connectionMakerMock.makeConnection(anyString())).thenAnswer(new Answer<MockInputStream>(){
-			    @Override
-			    public MockInputStream answer(InvocationOnMock invocation) throws Throwable {
-			      return new MockInputStream();
-			    }
-			  });
-		} catch (Exception e) {
-			fail( "testCanCreateThread failed" );
-		}*/
-		MockFactoryHttpConnection connectionMakerMock = new MockFactoryHttpConnection();
-		FactoryThreadDownload factory = new FactoryThreadDownload(linksData, connectionMakerMock, "saveFolder", mockByteCounter, mockSpeedControll);
+		FactoryThreadDownload factory = new FactoryThreadDownload(linksData, connectionMakerMock, saverMock, mockByteCounter, mockSpeedControll);
+
 		assertEquals(false, factory.canCreateThread());
 		
 		linksData.add(mock(LinkData.class));
@@ -55,11 +55,7 @@ public class FactoryThreadHttpDownloadTest {
 	public void testMakeThreadDownload()
 	{
 		Stack<LinkData> linksData = new Stack<LinkData>();		
-		IDownloadedBytesEvent mockByteCounter = mock(IDownloadedBytesEvent.class);
-		ISpeedController mockSpeedControll = mock(ISpeedController.class);
-				
-		MockFactoryHttpConnection connectionMakerMock = new MockFactoryHttpConnection();
-		FactoryThreadDownload factory = new FactoryThreadDownload(linksData, connectionMakerMock, "saveFolder", mockByteCounter, mockSpeedControll);
+		FactoryThreadDownload factory = new FactoryThreadDownload(linksData, connectionMakerMock, saverMock, mockByteCounter, mockSpeedControll);
 
 		try {
 			assertEquals(null, factory.makeThreadDownload());
