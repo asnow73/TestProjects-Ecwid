@@ -6,6 +6,10 @@
 
 *.class
 
+.classpath
+
+.project
+
 AntBuild/reportsTest
 
 AntBuild/bin
