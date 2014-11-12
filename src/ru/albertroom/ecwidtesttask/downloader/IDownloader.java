@@ -5,7 +5,9 @@
 
 package ru.albertroom.ecwidtesttask.downloader;
 
+import java.io.IOException;
+
 public interface IDownloader
 {
-	byte[] download() throws Exception;
+	byte[] download() throws IOException;
 }

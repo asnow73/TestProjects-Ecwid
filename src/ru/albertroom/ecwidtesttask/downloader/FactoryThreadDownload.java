@@ -1,6 +1,8 @@
 package ru.albertroom.ecwidtesttask.downloader;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.Stack;
 
 import ru.albertroom.ecwidtesttask.downloader.services.IFactorySaver;
@@ -36,7 +38,7 @@ public class FactoryThreadDownload implements IFactoryThreadDownload
 		return (!linksData.empty());
 	}
 	
-	public Thread makeThreadDownload() throws Exception
+	public Thread makeThreadDownload() throws MalformedURLException, IOException
 	{
 		ThreadDownload thread = null;
 		if (canCreateThread())
