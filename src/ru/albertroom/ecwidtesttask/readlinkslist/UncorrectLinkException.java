@@ -1,6 +1,6 @@
 package ru.albertroom.ecwidtesttask.readlinkslist;
 
-public class UncorrectLinkException extends RuntimeException
+public class UncorrectLinkException extends Exception
 {
 	/**
 	 * 

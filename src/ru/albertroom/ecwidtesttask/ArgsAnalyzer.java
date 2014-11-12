@@ -93,7 +93,7 @@ public class ArgsAnalyzer
 	}
 	
 	//Получить количество одновременно качающих потоков
-	public int getNumberOfThreads() throws ParseException
+	public int getNumberOfThreads() throws NumberFormatException
 	{
 		int threadsNumber = 0;	
 		try
@@ -109,7 +109,7 @@ public class ArgsAnalyzer
 	}
 	
 	//Получить значение общего ограничения на скорость скачивания
-	public int getDownloadingSpeedLimit() throws ParseException
+	public int getDownloadingSpeedLimit() throws NumberFormatException
 	{
 		final int KBYTES = 1024;
 		final int MBYTES = 1024*1024;
